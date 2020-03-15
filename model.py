@@ -15,8 +15,8 @@ class FFTSR:
 
 
     def build_model(self):
-        self.images = tf.placeholder(tf.float32, [256, 256, 3], name='input_img')
-        self.label = tf.placeholder(tf.float32, [256, 256, 3], name='HR_img')
+        self.images = tf.placeholder(tf.float32, [256, 256], name='input_img')
+        self.label = tf.placeholder(tf.float32, [256, 256], name='HR_img')
 
 
         # self.images = tf.reshape(self.images,[1, 256, 256, 1])
@@ -27,28 +27,28 @@ class FFTSR:
         #self.w1 = self.w1 + tf.random_normal(tf.shape(self.w1))
 
         self.weights = {
-            'w1': tf.Variable(tf.random_normal([256, 256, 3],  stddev=1e-3), name='w1'),
-            'w2': tf.Variable(tf.random_normal([256, 256, 3], stddev=1e-3), name='w2'),
-            'w3': tf.Variable(tf.random_normal([256, 256, 3], stddev=1e-3), name='w3'),
-            'w4': tf.Variable(tf.random_normal([256, 256, 3], stddev=1e-3), name='w4'),
-            'w5': tf.Variable(tf.random_normal([256, 256, 3], stddev=1e-3), name='w5')
+            'w1': tf.Variable(tf.random_normal([256, 256],  stddev=1e-3), name='w1'),
+            # 'w2': tf.Variable(tf.random_normal([256, 256, 3], stddev=1e-3), name='w2'),
+            # 'w3': tf.Variable(tf.random_normal([256, 256, 3], stddev=1e-3), name='w3'),
+            # 'w4': tf.Variable(tf.random_normal([256, 256, 3], stddev=1e-3), name='w4'),
+            # 'w5': tf.Variable(tf.random_normal([256, 256, 3], stddev=1e-3), name='w5')
         }
 
         self.biases = {
-            'b1': tf.Variable(tf.zeros([256, 256, 3], name='b1')),
-            'b2': tf.Variable(tf.zeros([256, 256, 3], name='b2')),
-            'b3': tf.Variable(tf.zeros([256, 256, 3], name='b3')),
-            'b4': tf.Variable(tf.zeros([256, 256, 3], name='b4')),
-            'b5': tf.Variable(tf.zeros([256, 256, 3], name='b5'))
+            'b1': tf.Variable(tf.zeros([256, 256], name='b1')),
+            # 'b2': tf.Variable(tf.zeros([256, 256, 3], name='b2')),
+            # 'b3': tf.Variable(tf.zeros([256, 256, 3], name='b3')),
+            # 'b4': tf.Variable(tf.zeros([256, 256, 3], name='b4')),
+            # 'b5': tf.Variable(tf.zeros([256, 256, 3], name='b5'))
 
         }
 
         self.smooth = {
-            's1': tf.Variable(tf.random_normal([5, 5,3,3], stddev=1e-3), name='s1'),
-            's2': tf.Variable(tf.random_normal([5, 5,3,3], stddev=1e-3), name='s2'),
-            's3': tf.Variable(tf.random_normal([5, 5,3,3], stddev=1e-3), name='s3'),
-            's4': tf.Variable(tf.random_normal([5, 5,3,3], stddev=1e-3), name='s4'),
-            's5': tf.Variable(tf.random_normal([5, 5,3,3], stddev=1e-3), name='s5')
+            's1': tf.Variable(tf.random_normal([5, 5,1,1], stddev=1e-3), name='s1'),
+            # 's2': tf.Variable(tf.random_normal([5, 5,3,3], stddev=1e-3), name='s2'),
+            # 's3': tf.Variable(tf.random_normal([5, 5,3,3], stddev=1e-3), name='s3'),
+            # 's4': tf.Variable(tf.random_normal([5, 5,3,3], stddev=1e-3), name='s4'),
+            # 's5': tf.Variable(tf.random_normal([5, 5,3,3], stddev=1e-3), name='s5')
         }
 
 
@@ -64,28 +64,27 @@ class FFTSR:
         print(self.biases['b1'])
         x1 = tf.nn.relu(tf.math.multiply(x, self.weights['w1']) + self.biases['b1'])
         # x1 = tf.math.multiply(x, self.weights['w1']) + self.biases['b1']
-        x1 = tf.reshape(x1,[1,x1.shape[0],x1.shape[1],3])
+        x1 = tf.reshape(x1,[1,x1.shape[0],x1.shape[1],1])
         conv1 = (tf.nn.conv2d(x1, self.smooth['s1'], strides=[1,1,1,1], padding='SAME'))
 
 
-        x2 = tf.nn.relu(tf.math.multiply(x, self.weights['w2']) + self.biases['b2'])
-        x2 = tf.reshape(x2,[1,x2.shape[0],x2.shape[1],3])
-        # print(x2)
-        conv2 = (tf.nn.conv2d(x2, self.smooth['s2'], strides=[1,1,1,1], padding='SAME'))
+        x2 = tf.nn.relu(tf.math.multiply(x, self.weights['w1']) + self.biases['b1'])
+        x2 = tf.reshape(x2,[1,x2.shape[0],x2.shape[1],1])
+        conv2 = (tf.nn.conv2d(x2, self.smooth['s1'], strides=[1,1,1,1], padding='SAME'))
 
         # print(x)
         # print(self.weights['w3'])
-        x3 = tf.nn.relu(tf.math.multiply(x, self.weights['w3']) + self.biases['b3'])
-        x3 = tf.reshape(x3,[1,x3.shape[0],x3.shape[1],3])
-        conv3 = (tf.nn.conv2d(x3, self.smooth['s3'], strides=[1,1,1,1], padding='SAME'))
+        x3 = tf.nn.relu(tf.math.multiply(x, self.weights['w1']) + self.biases['b1'])
+        x3 = tf.reshape(x3,[1,x3.shape[0],x3.shape[1],1])
+        conv3 = (tf.nn.conv2d(x3, self.smooth['s1'], strides=[1,1,1,1], padding='SAME'))
 
-        x4 = tf.nn.relu(tf.math.multiply(x, self.weights['w4']) + self.biases['b4'])
-        x4 = tf.reshape(x4,[1,x4.shape[0],x4.shape[1],3])
-        conv4 = (tf.nn.conv2d(x4, self.smooth['s4'], strides=[1,1,1,1], padding='SAME'))
+        x4 = tf.nn.relu(tf.math.multiply(x, self.weights['w1']) + self.biases['b1'])
+        x4 = tf.reshape(x4,[1,x4.shape[0],x4.shape[1],1])
+        conv4 = (tf.nn.conv2d(x4, self.smooth['s1'], strides=[1,1,1,1], padding='SAME'))
 
-        x5 = tf.nn.relu(tf.math.multiply(x, self.weights['w5']) + self.biases['b5'])
-        x5 = tf.reshape(x5,[1,x5.shape[0],x5.shape[1],3])
-        conv5 = (tf.nn.conv2d(x5, self.smooth['s5'], strides=[1,1,1,1], padding='SAME'))
+        x5 = tf.nn.relu(tf.math.multiply(x, self.weights['w1']) + self.biases['b1'])
+        x5 = tf.reshape(x5,[1,x5.shape[0],x5.shape[1],1])
+        conv5 = (tf.nn.conv2d(x5, self.smooth['s1'], strides=[1,1,1,1], padding='SAME'))
 
         x_out = conv1+conv2+conv3+conv4+conv5
 

@@ -8,11 +8,10 @@ from matplotlib import pyplot as plt
 
 if __name__ == '__main__':
     img = 'images_train/butterfly.bmp'
-    img = cv2.imread(img)
+    img = cv2.imread(img,cv2.IMREAD_GRAYSCALE)
     img = img/255
     print(img.shape)
     hr_img = fft(img)*(1e3*1e-5)
-    # print(hr_img.shape)
     lr_img = fft(up_sample(bicubic(img)))*(1e3*1e-5)
 
 
