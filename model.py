@@ -27,11 +27,11 @@ class FFTSR:
         #self.w1 = self.w1 + tf.random_normal(tf.shape(self.w1))
 
         self.weights = {
-            'w1': tf.Variable(tf.random_normal([256, 256],  stddev=1e-3), name='w1'),
-            'w2': tf.Variable(tf.random_normal([256, 256], stddev=1e-3), name='w2'),
-            'w3': tf.Variable(tf.random_normal([256, 256], stddev=1e-3), name='w3'),
-            'w4': tf.Variable(tf.random_normal([256, 256], stddev=1e-3), name='w4'),
-            'w5': tf.Variable(tf.random_normal([256, 256], stddev=1e-3), name='w5')
+            'w1': tf.Variable(tf.random_normal([self.images.shape[0], self.images.shape[1]],  stddev=1e-3), name='w1'),
+            'w2': tf.Variable(tf.random_normal([self.images.shape[0], self.images.shape[1]], stddev=1e-3), name='w2'),
+            'w3': tf.Variable(tf.random_normal([self.images.shape[0], self.images.shape[1]], stddev=1e-3), name='w3'),
+            'w4': tf.Variable(tf.random_normal([self.images.shape[0], self.images.shape[1]], stddev=1e-3), name='w4'),
+            'w5': tf.Variable(tf.random_normal([self.images.shape[0], self.images.shape[1]], stddev=1e-3), name='w5')
         }
 
         self.biases = {
