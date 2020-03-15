@@ -2,6 +2,8 @@
 import numpy as np
 import scipy
 import cv2
+from matplotlib import pyplot as plt
+
 
 def fft(img):
     npFFT = np.fft.fft2(img)  # Calculate FFT
@@ -16,8 +18,13 @@ def ifft(img):
     return npIffts
 
 def bicubic(img,scale = 2):
-    return  cv2.resize(img, None, fx=1 / scale, fy=1 / scale, interpolation=cv2.INTER_NEAREST)
+    return cv2.resize(img, None, fx=1 / scale, fy=1 / scale, interpolation=cv2.INTER_CUBIC)
 
 
 def up_sample(img,scale =2):
-    return  cv2.resize(img, None, fx= scale, fy= scale, interpolation=cv2.INTER_NEAREST)
+    return cv2.resize(img, None, fx= scale, fy= scale, interpolation=cv2.INTER_CUBIC)
+
+def imshow(img):
+    magnitude_spectrum = 20 * np.log(np.abs(img))
+    plt.imshow(magnitude_spectrum, cmap='gray')
+    plt.show()

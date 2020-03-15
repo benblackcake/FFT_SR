@@ -2,7 +2,7 @@
 
 import tensorflow as tf
 import numpy as np
-from matplotlib import pyplot as plt
+from utils import imshow
 
 class FFTSR:
 
@@ -21,7 +21,10 @@ class FFTSR:
 
         # self.images = tf.reshape(self.images,[1, 256, 256, 1])
         # self.label = tf.reshape(self.label, [1, 256, 256, 1])
+        # w1= tf.placeholder(tf.random_normal([None, None], stddev=1e-3), name='w1'),
 
+        self.w1 = tf.placeholder(tf.float32,[None,None], name='w_1')
+        self.w1 = self.w1 + tf.random_normal(tf.shape(self.w1))
 
         self.weights = {
             'w1': tf.Variable(tf.random_normal([self.images.shape[0], self.images.shape[1]],  stddev=1e-3), name='w1'),
@@ -50,52 +53,65 @@ class FFTSR:
 
 
         self.pred = self.model()
-        self.loss = tf.nn.l2_loss(self.label - self.pred)
-        # self.loss = tf.reduce_mean(tf.square(self.label - self.pred))
+        # self.loss = tf.nn.l2_loss(self.label - self.pred)
+        # print(self.pred)
+        self.loss = tf.reduce_mean(tf.square(self.label - self.pred))
         # print('build_model_image_shape',self.images)
 
-    def conv_(self):
-        x1 = tf.math.multiply(self.images, self.weights['w1']) + self.biases['b1']
+    def conv_(self,x):
+        x1 = tf.math.multiply(x, self.w1) + self.biases['b1']
         x1 = tf.reshape(x1,[1,x1.shape[0],x1.shape[1],1])
-        conv1 = (tf.nn.conv2d(x1, self.smooth['s1'], strides=[1,1,1,1], padding='SAME'))
+        conv1 = tf.nn.relu(tf.nn.conv2d(x1, self.smooth['s1'], strides=[1,1,1,1], padding='SAME'))
 
 
-        x2 = tf.math.multiply(self.images, self.weights['w2']) + self.biases['b2']
+        x2 = tf.math.multiply(x, self.weights['w2']) + self.biases['b2']
         x2 = tf.reshape(x2,[1,x2.shape[0],x2.shape[1],1])
-        conv2 = (tf.nn.conv2d(x2, self.smooth['s2'], strides=[1,1,1,1], padding='SAME'))
+        conv2 = tf.nn.relu(tf.nn.conv2d(x2, self.smooth['s2'], strides=[1,1,1,1], padding='SAME'))
 
-        x3 = tf.math.multiply(self.images, self.weights['w3']) + self.biases['b3']
+        x3 = tf.math.multiply(x, self.weights['w3']) + self.biases['b3']
         x3 = tf.reshape(x3,[1,x3.shape[0],x3.shape[1],1])
-        conv3 = (tf.nn.conv2d(x3, self.smooth['s3'], strides=[1,1,1,1], padding='SAME'))
+        conv3 = tf.nn.relu(tf.nn.conv2d(x3, self.smooth['s3'], strides=[1,1,1,1], padding='SAME'))
 
-        x4 = tf.math.multiply(self.images, self.weights['w4']) + self.biases['b4']
+        x4 = tf.math.multiply(x, self.weights['w4']) + self.biases['b4']
         x4 = tf.reshape(x4,[1,x4.shape[0],x4.shape[1],1])
-        conv4 = (tf.nn.conv2d(x4, self.smooth['s4'], strides=[1,1,1,1], padding='SAME'))
+        conv4 = tf.nn.relu(tf.nn.conv2d(x4, self.smooth['s4'], strides=[1,1,1,1], padding='SAME'))
 
-        x5 = tf.math.multiply(self.images, self.weights['w5']) + self.biases['b5']
+        x5 = tf.math.multiply(x, self.weights['w5']) + self.biases['b5']
         x5 = tf.reshape(x5,[1,x5.shape[0],x5.shape[1],1])
-        conv5 = (tf.nn.conv2d(x5, self.smooth['s5'], strides=[1,1,1,1], padding='SAME'))
+        conv5 = tf.nn.relu(tf.nn.conv2d(x5, self.smooth['s5'], strides=[1,1,1,1], padding='SAME'))
 
-        x = conv1+conv2+conv3+conv4+conv5
+        x_out = conv1+conv2+conv3+conv4+conv5
 
-        print('debug: ',x)
-        print(tf.squeeze(x))
-        return tf.squeeze(x)
+        # print('debug: ',x)
+        print(tf.squeeze(x_out))
+        return tf.squeeze(x_out)
 
 
     def model(self):
-        for i in range(6):
-            x = self.conv_()
-        return x
+        # x = None
+        f1 = self.conv_(self.images)
+        f2 = self.conv_(f1)
+        f3 = self.conv_(f2)
+        f4 = self.conv_(f3)
+        f5 = self.conv_(f4)
+        f6 = self.conv_(f5)
+
+        print("debug ->",f1)
+        return f1+f2+f3+f4+f5+f6
 
     def run(self,hr_img,lr_img):
         self.train_op = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.loss)
         tf.initialize_all_variables().run()
         print('run: ->',hr_img.shape)
+        shape = np.zeros(hr_img.shape)
+        # print(shape)
         for er in range(self.epoch):
             # image = tf.reshape(image,[image.shape[0],image.shape[1]])
-            _,x = self.sess.run([self.train_op,self.loss],feed_dict={self.images: hr_img, self.label: lr_img})
-            x_out = self.sess.run(self.conv_(),feed_dict={self.images: hr_img, self.label: lr_img})
+            _,x = self.sess.run([self.train_op,self.loss],feed_dict={self.images: lr_img, self.label:hr_img ,self.w1:shape})
+            # w = self.sess.run([self.w1],feed_dict={self.w1:shape})
+            # print(w)
 
-
+            # x_out = self.sess.run([self.conv_(self.images)],feed_dict={self.images: hr_img, self.label: lr_img})
+            # imshow(x_out)
             print(x)
+            # print(t)
