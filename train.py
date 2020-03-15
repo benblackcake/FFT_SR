@@ -20,3 +20,6 @@ if __name__ == '__main__':
         fftsr = FFTSR(sess, 1e-4, 10000)
         # fftsr.build_model()
         fftsr.run(hr_img,lr_img)
+        
+        out = fftsr.model()
+        print(out)
