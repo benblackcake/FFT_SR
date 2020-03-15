@@ -52,33 +52,33 @@ class FFTSR:
         }
 
 
-        self.pred = self.model()
+        self.pred = self.conv_()
         # self.loss = tf.nn.l2_loss(self.label - self.pred)
         # print(self.pred)
         self.loss = tf.reduce_mean(tf.square(self.label - self.pred))
         # print('build_model_image_shape',self.images)
 
-    def conv_(self,x):
+    def conv_(self):
 
 
-        x1 = tf.nn.relu(tf.math.multiply(x, self.weights['w1']) + self.biases['b1'])
+        x1 = tf.nn.relu(tf.math.multiply(self.images, self.weights['w1']) + self.biases['b1'])
         x1 = tf.reshape(x1,[1,x1.shape[0],x1.shape[1],1])
         conv1 = (tf.nn.conv2d(x1, self.smooth['s1'], strides=[1,1,1,1], padding='SAME'))
 
 
-        x2 = tf.nn.relu(tf.math.multiply(x, self.weights['w2']) + self.biases['b2'])
+        x2 = tf.nn.relu(tf.math.multiply(self.images, self.weights['w2']) + self.biases['b2'])
         x2 = tf.reshape(x2,[1,x2.shape[0],x2.shape[1],1])
         conv2 = (tf.nn.conv2d(x2, self.smooth['s2'], strides=[1,1,1,1], padding='SAME'))
 
-        x3 = tf.nn.relu(tf.math.multiply(x, self.weights['w3']) + self.biases['b3'])
+        x3 = tf.nn.relu(tf.math.multiply(self.images, self.weights['w3']) + self.biases['b3'])
         x3 = tf.reshape(x3,[1,x3.shape[0],x3.shape[1],1])
         conv3 = (tf.nn.conv2d(x3, self.smooth['s3'], strides=[1,1,1,1], padding='SAME'))
 
-        x4 = tf.nn.relu(tf.math.multiply(x, self.weights['w4']) + self.biases['b4'])
+        x4 = tf.nn.relu(tf.math.multiply(self.images, self.weights['w4']) + self.biases['b4'])
         x4 = tf.reshape(x4,[1,x4.shape[0],x4.shape[1],1])
         conv4 = (tf.nn.conv2d(x4, self.smooth['s4'], strides=[1,1,1,1], padding='SAME'))
 
-        x5 = tf.nn.relu(tf.math.multiply(x, self.weights['w5']) + self.biases['b5'])
+        x5 = tf.nn.relu(tf.math.multiply(self.images, self.weights['w5']) + self.biases['b5'])
         x5 = tf.reshape(x5,[1,x5.shape[0],x5.shape[1],1])
         conv5 = (tf.nn.conv2d(x5, self.smooth['s5'], strides=[1,1,1,1], padding='SAME'))
 
@@ -90,19 +90,19 @@ class FFTSR:
 
 
 
-    def model(self):
-        # x = None
-        f1 = self.conv_(self.images)
-        f2 = self.conv_(f1)
-        f3 = self.conv_(f2)
-        f4 = self.conv_(f3)
-        f5 = self.conv_(f4)
-        f6 = self.conv_(f5)
-
-        # print("debug ->",f1)
-        fout = f1+f2+f3+f4+f5
-        fout = tf.transpose(fout)
-        return self.images+fout
+    # def model(self):
+    #     # x = None
+    #     f1 = self.conv_(self.images)
+    #     f2 = self.conv_(f1)
+    #     f3 = self.conv_(f2)
+    #     f4 = self.conv_(f3)
+    #     f5 = self.conv_(f4)
+    #     f6 = self.conv_(f5)
+    #
+    #     # print("debug ->",f1)
+    #     fout = f1+f2+f3+f4+f5+f6
+    #     fout = tf.transpose(fout)
+    #     return self.images+fout
 
     def run(self,hr_img,lr_img):
         self.train_op = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.loss)
