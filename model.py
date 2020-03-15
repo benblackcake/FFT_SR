@@ -23,15 +23,15 @@ class FFTSR:
         # self.label = tf.reshape(self.label, [1, 256, 256, 1])
         # w1= tf.placeholder(tf.random_normal([None, None], stddev=1e-3), name='w1'),
 
-        self.w1 = tf.placeholder(tf.float32,[None,None], name='w_1')
-        self.w1 = self.w1 + tf.random_normal(tf.shape(self.w1))
+        #self.w1 = tf.placeholder(tf.float32,[None,None], name='w_1')
+        #self.w1 = self.w1 + tf.random_normal(tf.shape(self.w1))
 
         self.weights = {
-            'w1': tf.Variable(tf.random_normal([self.images.shape[0], self.images.shape[1]],  stddev=1e-3), name='w1'),
-            'w2': tf.Variable(tf.random_normal([self.images.shape[0], self.images.shape[1]], stddev=1e-3), name='w2'),
-            'w3': tf.Variable(tf.random_normal([self.images.shape[0], self.images.shape[1]], stddev=1e-3), name='w3'),
-            'w4': tf.Variable(tf.random_normal([self.images.shape[0], self.images.shape[1]], stddev=1e-3), name='w4'),
-            'w5': tf.Variable(tf.random_normal([self.images.shape[0], self.images.shape[1]], stddev=1e-3), name='w5')
+            'w1': tf.Variable(tf.random_normal([256, 256],  stddev=1e-3), name='w1'),
+            'w2': tf.Variable(tf.random_normal([256, 256], stddev=1e-3), name='w2'),
+            'w3': tf.Variable(tf.random_normal([256, 256], stddev=1e-3), name='w3'),
+            'w4': tf.Variable(tf.random_normal([256, 256], stddev=1e-3), name='w4'),
+            'w5': tf.Variable(tf.random_normal([256, 256], stddev=1e-3), name='w5')
         }
 
         self.biases = {
@@ -59,7 +59,7 @@ class FFTSR:
         # print('build_model_image_shape',self.images)
 
     def conv_(self,x):
-        x1 = tf.math.multiply(x, self.w1) + self.biases['b1']
+        x1 = tf.math.multiply(x, self.weights['w1']) + self.biases['b1']
         x1 = tf.reshape(x1,[1,x1.shape[0],x1.shape[1],1])
         conv1 = tf.nn.relu(tf.nn.conv2d(x1, self.smooth['s1'], strides=[1,1,1,1], padding='SAME'))
 
@@ -105,14 +105,17 @@ class FFTSR:
         tf.initialize_all_variables().run()
         print('run: ->',hr_img.shape)
         shape = np.zeros(hr_img.shape)
+        err_ = []
         # print(shape)
         for er in range(self.epoch):
             # image = tf.reshape(image,[image.shape[0],image.shape[1]])
-            _,x = self.sess.run([self.train_op,self.loss],feed_dict={self.images: lr_img, self.label:hr_img ,self.w1:shape})
+            _,x = self.sess.run([self.train_op,self.loss],feed_dict={self.images: lr_img, self.label:hr_img})
             # w = self.sess.run([self.w1],feed_dict={self.w1:shape})
             # print(w)
 
-            # x_out = self.sess.run([self.conv_(self.images)],feed_dict={self.images: hr_img, self.label: lr_img})
             # imshow(x_out)
             print(x)
+        x_out = self.sess.run([self.model()],feed_dict={self.images: lr_img, self.label: hr_img})
+        return x_out
+        #imshow()
             # print(t)

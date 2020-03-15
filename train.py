@@ -3,7 +3,7 @@ from model import FFTSR
 import tensorflow as tf
 import numpy as np
 import cv2
-from utils import fft, bicubic, up_sample
+from utils import fft, bicubic, up_sample,imshow,ifft
 from matplotlib import pyplot as plt
 
 if __name__ == '__main__':
@@ -17,9 +17,15 @@ if __name__ == '__main__':
 
     # img = img.reshape([1,256,256,1])
     with tf.Session() as sess:
-        fftsr = FFTSR(sess, 1e-4, 10000)
+        fftsr = FFTSR(sess, 1e-4, 7000)
         # fftsr.build_model()
-        fftsr.run(hr_img,lr_img)
+        out = fftsr.run(hr_img,lr_img)
+        print(type(out))
+        out = np.asarray(out)
+        out = np.squeeze(out)
         
-        out = fftsr.model()
+        out = ifft(out)/(1e3*1e-5)
+        out = out *255
+        print(out.shape)
+        imshow(out)
         print(out)
