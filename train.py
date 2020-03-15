@@ -24,8 +24,9 @@ if __name__ == '__main__':
         out = np.asarray(out)
         out = np.squeeze(out)
 
-        imshow_spectrum(out)
         out = ifft(out)/(1e3*1e-5)
+        imshow_spectrum(out)
+
         out = out *255
         out = np.clip(out,0,255)
         print(out.shape)
