@@ -82,8 +82,8 @@ class FFTSR:
         x5 = tf.reshape(x5,[1,x5.shape[0],x5.shape[1],1])
         conv5 = (tf.nn.conv2d(x5, self.smooth['s5'], strides=[1,1,1,1], padding='SAME'))
 
-        x_out = tf.reduce_sum([conv1,conv2,conv3,conv4,conv5])
-        # conv1 + conv2 + conv3 + conv4 + conv5
+        # x_out = tf.reduce_sum([conv1,conv2,conv3,conv4,conv5])
+        x_out = conv1 + conv2 + conv3 + conv4 + conv5
         # print('debug: ',x)
         print(x_out)
         return tf.squeeze(x_out)
