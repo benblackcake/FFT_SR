@@ -14,7 +14,7 @@ def fft(img):
 def ifft(img):
     npIffts = np.fft.ifftshift(img)
     npIffts =  np.fft.ifft2(npIffts)
-
+    npIffts = np.abs(npIffts)
     return npIffts
 
 def bicubic(img,scale = 2):
