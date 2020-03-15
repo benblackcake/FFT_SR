@@ -25,6 +25,6 @@ def up_sample(img,scale =2):
     return cv2.resize(img, None, fx= scale, fy= scale, interpolation=cv2.INTER_CUBIC)
 
 def imshow(img):
-    magnitude_spectrum = 20 * np.log(np.abs(img))
-    plt.imshow(magnitude_spectrum, cmap='gray')
+    # magnitude_spectrum = 20 * np.log(np.abs(img))
+    plt.imshow(img, cmap='gray')
     plt.show()
