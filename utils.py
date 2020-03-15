@@ -28,3 +28,8 @@ def imshow(img):
     # magnitude_spectrum = 20 * np.log(np.abs(img))
     plt.imshow(img, cmap='gray')
     plt.show()
+
+def imshow_spectrum(fftimg):
+    magnitude_spectrum = 20 * np.log(np.abs(fftimg))
+    plt.imshow(fftimg, cmap='gray')
+    plt.show()

@@ -3,7 +3,7 @@ from model import FFTSR
 import tensorflow as tf
 import numpy as np
 import cv2
-from utils import fft, bicubic, up_sample,imshow,ifft
+from utils import fft, bicubic, up_sample,imshow,ifft,imshow_spectrum
 from matplotlib import pyplot as plt
 
 if __name__ == '__main__':
@@ -23,7 +23,8 @@ if __name__ == '__main__':
         print(type(out))
         out = np.asarray(out)
         out = np.squeeze(out)
-        
+
+        imshow_spectrum(out)
         out = ifft(out)/(1e3*1e-5)
         out = out *255
         out = np.clip(out,0,255)
