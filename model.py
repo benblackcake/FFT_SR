@@ -78,8 +78,8 @@ class FFTSR:
 
         x = conv1+conv2+conv3+conv4+conv5
 
-        print('debug: ',x)
-        print(tf.squeeze(x))
+        #print('debug: ',x)
+        #print(tf.squeeze(x))
         return tf.squeeze(x)
 
 
