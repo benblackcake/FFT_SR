@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     # img = img.reshape([1,256,256,1])
     with tf.Session() as sess:
-        fftsr = FFTSR(sess, 1e-4, 1000)
+        fftsr = FFTSR(sess, 1e-4, 10000)
         # fftsr.build_model()
         out = fftsr.run(hr_img,lr_img)
         print(type(out))
