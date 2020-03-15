@@ -82,8 +82,8 @@ class FFTSR:
         x5 = tf.reshape(x5,[1,x5.shape[0],x5.shape[1],1])
         conv5 = (tf.nn.conv2d(x5, self.smooth['s5'], strides=[1,1,1,1], padding='SAME'))
 
-        x_out = conv1+conv2+conv3+conv4+conv5
-
+        x_out = tf.reduce_sum([conv1,conv2,conv3,conv4,conv5])
+        # conv1 + conv2 + conv3 + conv4 + conv5
         # print('debug: ',x)
         print(x_out)
         return tf.squeeze(x_out)
@@ -100,7 +100,7 @@ class FFTSR:
         f6 = self.conv_(f5)
 
         # print("debug ->",f1)
-        return f6
+        return f1+f6
 
     def run(self,hr_img,lr_img):
         self.train_op = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.loss)
