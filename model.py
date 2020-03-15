@@ -100,7 +100,7 @@ class FFTSR:
         f6 = self.conv_(f5)
 
         # print("debug ->",f1)
-        return f1+f6
+        return self.images+f6
 
     def run(self,hr_img,lr_img):
         self.train_op = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.loss)
