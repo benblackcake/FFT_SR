@@ -101,7 +101,7 @@ class FFTSR:
 
         # print("debug ->",f1)
         f6 = f1+f2+f3+f4+f5
-        f6 = np.transpose(f6)
+        f6 = tf.transpose(f6)
         return self.images+f6
 
     def run(self,hr_img,lr_img):
