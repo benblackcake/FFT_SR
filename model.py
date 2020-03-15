@@ -100,6 +100,7 @@ class FFTSR:
         f6 = self.conv_(f5)
 
         # print("debug ->",f1)
+        f6 = f1+f2+f3+f4+f5
         return self.images+f6
 
     def run(self,hr_img,lr_img):
