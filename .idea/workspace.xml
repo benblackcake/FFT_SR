@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d927a7d1-de5b-4a28-81f2-0b6ad44016ad" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model.py" afterPath="$PROJECT_DIR$/model.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/train.py" afterPath="$PROJECT_DIR$/train.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,21 +17,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="train.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="train.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
+            <state relative-caret-position="288">
               <caret line="19" column="39" lean-forward="false" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="39" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="model.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="model.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="432">
-              <caret line="86" column="49" lean-forward="false" selection-start-line="86" selection-start-column="49" selection-end-line="86" selection-end-column="49" />
+              <caret line="84" column="81" lean-forward="false" selection-start-line="84" selection-start-column="81" selection-end-line="84" selection-end-column="81" />
               <folding>
                 <element signature="e#2#25#0" expanded="true" />
               </folding>
@@ -43,13 +42,10 @@
       <file leaf-file-name="utils.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
+            <state relative-caret-position="230">
               <caret line="24" column="84" lean-forward="false" selection-start-line="24" selection-start-column="84" selection-end-line="24" selection-end-column="84" />
               <folding>
                 <element signature="e#1#19#0" expanded="true" />
-                <marker date="1584281683432" expanded="true" signature="243:365" ph="..." />
-                <marker date="1584281683432" expanded="true" signature="394:486" ph="..." />
-                <marker date="1584281683432" expanded="true" signature="517:603" ph="..." />
               </folding>
             </state>
           </provider>
@@ -71,11 +67,13 @@
       <find>VAILD</find>
       <find>tf.nn.relu</find>
       <find>[5, 5,3,3]</find>
+      <find>[256, 256, 3]</find>
     </findStrings>
     <replaceStrings>
       <replace>VALID</replace>
       <replace>SAME</replace>
       <replace>[5,5,1,1]</replace>
+      <replace>[256, 256]</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -85,8 +83,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/utils.py" />
-        <option value="$PROJECT_DIR$/model.py" />
         <option value="$PROJECT_DIR$/train.py" />
+        <option value="$PROJECT_DIR$/model.py" />
       </list>
     </option>
   </component>
@@ -281,9 +279,6 @@
           <caret line="24" column="84" lean-forward="false" selection-start-line="24" selection-start-column="84" selection-end-line="24" selection-end-column="84" />
           <folding>
             <element signature="e#1#19#0" expanded="true" />
-            <marker date="1584281683432" expanded="true" signature="243:365" ph="..." />
-            <marker date="1584281683432" expanded="true" signature="394:486" ph="..." />
-            <marker date="1584281683432" expanded="true" signature="517:603" ph="..." />
           </folding>
         </state>
       </provider>
@@ -302,9 +297,6 @@
           <caret line="22" column="48" lean-forward="false" selection-start-line="22" selection-start-column="48" selection-end-line="22" selection-end-column="48" />
           <folding>
             <element signature="e#1#19#0" expanded="true" />
-            <marker date="1584281683432" expanded="true" signature="243:365" ph="..." />
-            <marker date="1584281683432" expanded="true" signature="394:486" ph="..." />
-            <marker date="1584281683432" expanded="true" signature="517:603" ph="..." />
           </folding>
         </state>
       </provider>
@@ -360,19 +352,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="24" column="84" lean-forward="false" selection-start-line="24" selection-start-column="84" selection-end-line="24" selection-end-column="84" />
-          <folding>
-            <element signature="e#1#19#0" expanded="true" />
-            <marker date="1584281683432" expanded="true" signature="243:365" ph="..." />
-            <marker date="1584281683432" expanded="true" signature="394:486" ph="..." />
-            <marker date="1584281683432" expanded="true" signature="517:603" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/out_fftsr.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -383,21 +362,31 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model.py">
+    <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="86" column="49" lean-forward="false" selection-start-line="86" selection-start-column="49" selection-end-line="86" selection-end-column="49" />
+        <state relative-caret-position="288">
+          <caret line="19" column="39" lean-forward="false" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="24" column="84" lean-forward="false" selection-start-line="24" selection-start-column="84" selection-end-line="24" selection-end-column="84" />
           <folding>
-            <element signature="e#2#25#0" expanded="true" />
+            <element signature="e#1#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/train.py">
+    <entry file="file://$PROJECT_DIR$/model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="19" column="39" lean-forward="false" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="39" />
-          <folding />
+        <state relative-caret-position="432">
+          <caret line="84" column="81" lean-forward="false" selection-start-line="84" selection-start-column="81" selection-end-line="84" selection-end-column="81" />
+          <folding>
+            <element signature="e#2#25#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
