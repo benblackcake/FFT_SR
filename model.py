@@ -60,31 +60,27 @@ class FFTSR:
 
     def conv_(self,x):
 
-        print(x)
-        print(self.biases['b1'])
-        x1 = (tf.math.multiply(x, self.weights['w1']) + self.biases['b1'])
-        # x1 = tf.math.multiply(x, self.weights['w1']) + self.biases['b1']
+
+        x1 = tf.nn.relu(tf.math.multiply(x, self.weights['w1']) + self.biases['b1'])
         x1 = tf.reshape(x1,[1,x1.shape[0],x1.shape[1],1])
-        conv1 = tf.nn.relu(tf.nn.conv2d(x1, self.smooth['s1'], strides=[1,1,1,1], padding='SAME'))
+        conv1 = (tf.nn.conv2d(x1, self.smooth['s1'], strides=[1,1,1,1], padding='SAME'))
 
 
-        x2 = (tf.math.multiply(x, self.weights['w1']) + self.biases['b2'])
+        x2 = tf.nn.relu(tf.math.multiply(x, self.weights['w1']) + self.biases['b2'])
         x2 = tf.reshape(x2,[1,x2.shape[0],x2.shape[1],1])
-        conv2 =tf.nn.relu (tf.nn.conv2d(x2, self.smooth['s2'], strides=[1,1,1,1], padding='SAME'))
+        conv2 = (tf.nn.conv2d(x2, self.smooth['s2'], strides=[1,1,1,1], padding='SAME'))
 
-        # print(x)
-        # print(self.weights['w3'])
-        x3 = (tf.math.multiply(x, self.weights['w1']) + self.biases['b3'])
+        x3 = tf.nn.relu(tf.math.multiply(x, self.weights['w1']) + self.biases['b3'])
         x3 = tf.reshape(x3,[1,x3.shape[0],x3.shape[1],1])
-        conv3 = tf.nn.relu(tf.nn.conv2d(x3, self.smooth['s3'], strides=[1,1,1,1], padding='SAME'))
+        conv3 = (tf.nn.conv2d(x3, self.smooth['s3'], strides=[1,1,1,1], padding='SAME'))
 
-        x4 = (tf.math.multiply(x, self.weights['w1']) + self.biases['b4'])
+        x4 = tf.nn.relu(tf.math.multiply(x, self.weights['w1']) + self.biases['b4'])
         x4 = tf.reshape(x4,[1,x4.shape[0],x4.shape[1],1])
-        conv4 = tf.nn.relu(tf.nn.conv2d(x4, self.smooth['s4'], strides=[1,1,1,1], padding='SAME'))
+        conv4 = (tf.nn.conv2d(x4, self.smooth['s4'], strides=[1,1,1,1], padding='SAME'))
 
-        x5 = (tf.math.multiply(x, self.weights['w1']) + self.biases['b5'])
+        x5 = tf.nn.relu(tf.math.multiply(x, self.weights['w1']) + self.biases['b5'])
         x5 = tf.reshape(x5,[1,x5.shape[0],x5.shape[1],1])
-        conv5 = tf.nn.relu(tf.nn.conv2d(x5, self.smooth['s5'], strides=[1,1,1,1], padding='SAME'))
+        conv5 = (tf.nn.conv2d(x5, self.smooth['s5'], strides=[1,1,1,1], padding='SAME'))
 
         x_out = conv1+conv2+conv3+conv4+conv5
 
