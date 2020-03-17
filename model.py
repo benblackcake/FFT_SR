@@ -58,29 +58,29 @@ class FFTSR:
         # self.loss = tf.reduce_mean(tf.square(self.label - self.pred))
         # print('build_model_image_shape',self.images)
 
-    def conv_(self,x):
+    def conv_(self,x,weights,biases,smooth):
 
 
-        x1 = (tf.math.multiply(x, self.weights['w1']) + self.biases['b1'])
+        x1 = (tf.math.multiply(x, weights) + biases)
         x1 = tf.reshape(x1,[1,x1.shape[0],x1.shape[1],1])
-        conv1 = (tf.nn.conv2d(x1, self.smooth['s1'], strides=[1,1,1,1], padding='SAME'))
+        conv1 = (tf.nn.conv2d(x1, smooth, strides=[1,1,1,1], padding='SAME'))
 
 
-        x2 = (tf.math.multiply(x, self.weights['w2']) + self.biases['b2'])
+        x2 = (tf.math.multiply(x, weights) + biases)
         x2 = tf.reshape(x2,[1,x2.shape[0],x2.shape[1],1])
-        conv2 = (tf.nn.conv2d(x2, self.smooth['s2'], strides=[1,1,1,1], padding='SAME'))
+        conv2 = (tf.nn.conv2d(x2, smooth, strides=[1,1,1,1], padding='SAME'))
 
-        x3 = (tf.math.multiply(x, self.weights['w3']) + self.biases['b3'])
+        x3 = (tf.math.multiply(x, weights) + biases)
         x3 = tf.reshape(x3,[1,x3.shape[0],x3.shape[1],1])
-        conv3 = (tf.nn.conv2d(x3, self.smooth['s3'], strides=[1,1,1,1], padding='SAME'))
+        conv3 = (tf.nn.conv2d(x3, smooth, strides=[1,1,1,1], padding='SAME'))
 
-        x4 = (tf.math.multiply(x, self.weights['w4']) + self.biases['b4'])
+        x4 = (tf.math.multiply(x, weights) + biases)
         x4 = tf.reshape(x4,[1,x4.shape[0],x4.shape[1],1])
-        conv4 = (tf.nn.conv2d(x4, self.smooth['s4'], strides=[1,1,1,1], padding='SAME'))
+        conv4 = (tf.nn.conv2d(x4, smooth, strides=[1,1,1,1], padding='SAME'))
 
-        x5 = (tf.math.multiply(x, self.weights['w5']) + self.biases['b5'])
+        x5 = (tf.math.multiply(x, weights) + biases)
         x5 = tf.reshape(x5,[1,x5.shape[0],x5.shape[1],1])
-        conv5 = (tf.nn.conv2d(x5, self.smooth['s5'], strides=[1,1,1,1], padding='SAME'))
+        conv5 = (tf.nn.conv2d(x5, smooth, strides=[1,1,1,1], padding='SAME'))
 
         # x_out = tf.reduce_sum([conv1,conv2,conv3,conv4,conv5])
         x_out = conv1 + conv2 + conv3 + conv4 + conv5
@@ -92,15 +92,15 @@ class FFTSR:
 
     def model(self):
         # x = None
-        f1 = self.conv_(self.images)
-        f2 = self.conv_(f1)
-        f3 = self.conv_(f2)
-        f4 = self.conv_(f3)
-        f5 = self.conv_(f4)
-        f6 = self.conv_(f5)
+        f1 = self.conv_(self.images,self.weights['w1'],self.biases['b1'],self.smooth['s1'])
+        f2 = self.conv_(f1, self.weights['w2'],self.biases['b2'],self.smooth['s2'])
+        f3 = self.conv_(f2, self.weights['w3'],self.biases['b3'],self.smooth['s3'])
+        f4 = self.conv_(f3, self.weights['w4'],self.biases['b4'],self.smooth['s4'])
+        f5 = self.conv_(f4,self.weights['w5'],self.biases['b5'],self.smooth['s5'])
+        # f6 = self.conv_(f5, self.weights['w6'],self.biases['b1'],self.smooth['s1'])
 
         # print("debug ->",f1)
-        fout = f1+f2+f3+f4+f5+f6
+        fout = f1+f2+f3+f4+f5
         # fout = f1
         # fout = tf.transpose(fout)
         p = fout * self.weights['w1']
