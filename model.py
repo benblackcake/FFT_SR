@@ -103,7 +103,9 @@ class FFTSR:
         fout = f1+f2+f3+f4+f5+f6
         # fout = f1
         # fout = tf.transpose(fout)
-        return fout * self.weights['w1']
+        p = fout * self.weights['w1']
+        I_star = p+f1
+        return I_star
 
     def run(self,hr_img,lr_img):
         self.train_op = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.loss)
