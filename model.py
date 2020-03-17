@@ -62,7 +62,7 @@ class FFTSR:
 
 
         # x1 = (tf.math.multiply(x, weights) + biases)
-        x1 = tf.reshape(x,[1,x1.shape[0],x1.shape[1],1])
+        x1 = tf.reshape(x,[1,x.shape[0],x.shape[1],1])
         conv1 = (tf.nn.conv2d(x1, smooth, strides=[1,1,1,1], padding='SAME'))
 
         #
