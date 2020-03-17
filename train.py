@@ -25,7 +25,7 @@ if __name__ == '__main__':
         out = np.squeeze(out)
         imshow_spectrum(out)
 
-        out = ifft(out)/(1e3*1e-5)
+        out = ifft(out)
 
         out = out *255
         out = np.clip(out)
