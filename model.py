@@ -103,7 +103,7 @@ class FFTSR:
         fout = f1+f2+f3+f4+f5
         # fout = f1
         # fout = tf.transpose(fout)
-        p = fout * self.weights['w1']
+        p = fout * self.weights['w5']
         I_star = p+f1
         return I_star
 
