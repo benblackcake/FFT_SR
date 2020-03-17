@@ -28,7 +28,7 @@ if __name__ == '__main__':
         out = ifft(out)
 
         out = out *255
-        # out = np.clip(out)
+        out = np.clip(out,0,255)
         print(out.shape)
         imshow(out)
         print(out)
