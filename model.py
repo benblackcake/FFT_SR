@@ -100,7 +100,8 @@ class FFTSR:
         f6 = self.conv_(f5)
 
         # print("debug ->",f1)
-        fout = f1+f2+f3+f4+f5+f6
+        # fout = f1+f2+f3+f4+f5+f6
+        fout = f1
         # fout = tf.transpose(fout)
         return self.images+fout
 
