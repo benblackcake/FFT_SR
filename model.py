@@ -122,7 +122,6 @@ class FFTSR:
 
             # imshow(x_out)
             print(x)
-        x_out = self.sess.run([self.model()],feed_dict={self.images: lr_img, self.label: hr_img})
-        return x_out
+        # return x_out
         #imshow()
             # print(t)

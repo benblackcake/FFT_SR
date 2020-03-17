@@ -20,6 +20,8 @@ if __name__ == '__main__':
         fftsr = FFTSR(sess, 1e-4, 10000)
         # fftsr.build_model()
         out = fftsr.run(hr_img,lr_img)
+        x_out = sess.run([fftsr.model()],feed_dict={fftsr.images: lr_img, fftsr.label: hr_img})
+
         print(type(out))
         out = np.asarray(out)
         out = np.squeeze(out)
