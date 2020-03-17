@@ -1,6 +1,7 @@
 
 
 import tensorflow as tf
+from utils import fft
 import numpy as np
 from utils import imshow
 
@@ -44,7 +45,7 @@ class FFTSR:
         }
 
         self.smooth = {
-            's1': tf.Variable(tf.random_normal([5, 5,1,1], stddev=1e-3), name='s1'),
+            's1': tf.Variable(tf.random_normal([5, 5,1,1], stddev=1e-3),name='s1'),
             's2': tf.Variable(tf.random_normal([5,5,1,1], stddev=1e-3), name='s2'),
             's3': tf.Variable(tf.random_normal([5,5,1,1], stddev=1e-3), name='s3'),
             's4': tf.Variable(tf.random_normal([5,5,1,1], stddev=1e-3), name='s4'),
@@ -60,30 +61,41 @@ class FFTSR:
 
     def conv_(self,x,weights,biases,smooth):
 
+        x = tf.cast(x,tf.complex128)
+        weights = tf.cast(weights,tf.complex128)
+        biases = tf.cast(biases,tf.complex128)
+        # smooth = tf.cast(smooth,tf.complex128)
+
 
         x1 = (tf.math.multiply(x, weights) + biases)
         x1 = tf.reshape(x1,[1,x1.shape[0],x1.shape[1],1])
+        x1 = tf.cast(x1, tf.float32)
         conv1 = (tf.nn.conv2d(x1, smooth, strides=[1,1,1,1], padding='SAME'))
 
 
         x2 = (tf.math.multiply(x, weights) + biases)
         x2 = tf.reshape(x2,[1,x2.shape[0],x2.shape[1],1])
+        x2 = tf.cast(x2, tf.float32)
         conv2 = (tf.nn.conv2d(x2, smooth, strides=[1,1,1,1], padding='SAME'))
 
         x3 = (tf.math.multiply(x, weights) + biases)
         x3 = tf.reshape(x3,[1,x3.shape[0],x3.shape[1],1])
+        x3 = tf.cast(x3, tf.float32)
         conv3 = (tf.nn.conv2d(x3, smooth, strides=[1,1,1,1], padding='SAME'))
 
         x4 = (tf.math.multiply(x, weights) + biases)
         x4 = tf.reshape(x4,[1,x4.shape[0],x4.shape[1],1])
+        x4 = tf.cast(x4, tf.float32)
+
         conv4 = (tf.nn.conv2d(x4, smooth, strides=[1,1,1,1], padding='SAME'))
 
         x5 = (tf.math.multiply(x, weights) + biases)
         x5 = tf.reshape(x5,[1,x5.shape[0],x5.shape[1],1])
+        x5 = tf.cast(x5, tf.float32)
         conv5 = (tf.nn.conv2d(x5, smooth, strides=[1,1,1,1], padding='SAME'))
 
         # x_out = tf.reduce_sum([conv1,conv2,conv3,conv4,conv5])
-        x_out = conv1 + conv2 + conv3 + conv4 + conv5
+        x_out = conv1+conv2+conv3+conv4+conv5
         # print('debug: ',x)
         print(x_out)
         return tf.squeeze(x_out)
@@ -105,6 +117,7 @@ class FFTSR:
         # fout = tf.transpose(fout)
         p = fout * self.weights['w5']
         I_star = p+f1
+
         return I_star
 
     def run(self,hr_img,lr_img):

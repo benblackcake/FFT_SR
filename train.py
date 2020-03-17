@@ -13,7 +13,6 @@ if __name__ == '__main__':
     print(img.shape)
     hr_img = fft(img)
     lr_img = fft(up_sample(bicubic(img)))
-
     imshow_spectrum(lr_img)
 
     # img = img.reshape([1,256,256,1])
