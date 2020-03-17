@@ -62,29 +62,28 @@ class FFTSR:
 
 
         x1 = (tf.math.multiply(x, weights) + biases)
-        # x1 = tf.reshape(x,[1,x.shape[0],x.shape[1],1])
-        # conv1 = (tf.nn.conv2d(x1, smooth, strides=[1,1,1,1], padding='SAME'))
+        x1 = tf.reshape(x1,[1,x1.shape[0],x1.shape[1],1])
+        conv1 = (tf.nn.conv2d(x1, smooth, strides=[1,1,1,1], padding='SAME'))
 
-        #
+
         x2 = (tf.math.multiply(x, weights) + biases)
-        # x2 = tf.reshape(x2,[1,x2.shape[0],x2.shape[1],1])
-        # conv2 = (tf.nn.conv2d(x2, smooth, strides=[1,1,1,1], padding='SAME'))
-        #
+        x2 = tf.reshape(x2,[1,x2.shape[0],x2.shape[1],1])
+        conv2 = (tf.nn.conv2d(x2, smooth, strides=[1,1,1,1], padding='SAME'))
+
         x3 = (tf.math.multiply(x, weights) + biases)
-        # x3 = tf.reshape(x3,[1,x3.shape[0],x3.shape[1],1])
-        # conv3 = (tf.nn.conv2d(x3, smooth, strides=[1,1,1,1], padding='SAME'))
-        #
+        x3 = tf.reshape(x3,[1,x3.shape[0],x3.shape[1],1])
+        conv3 = (tf.nn.conv2d(x3, smooth, strides=[1,1,1,1], padding='SAME'))
+
         x4 = (tf.math.multiply(x, weights) + biases)
-        # x4 = tf.reshape(x4,[1,x4.shape[0],x4.shape[1],1])
-        # conv4 = (tf.nn.conv2d(x4, smooth, strides=[1,1,1,1], padding='SAME'))
-        #
+        x4 = tf.reshape(x4,[1,x4.shape[0],x4.shape[1],1])
+        conv4 = (tf.nn.conv2d(x4, smooth, strides=[1,1,1,1], padding='SAME'))
+
         x5 = (tf.math.multiply(x, weights) + biases)
-        # x5 = tf.reshape(x5,[1,x5.shape[0],x5.shape[1],1])
-        # conv5 = (tf.nn.conv2d(x5, smooth, strides=[1,1,1,1], padding='SAME'))
-        #
-        # # x_out = tf.reduce_sum([conv1,conv2,conv3,conv4,conv5])
-        # x_out = conv1 + conv2 + conv3 + conv4 + conv5
-        x_out = x1+x2+x3+x4+x5
+        x5 = tf.reshape(x5,[1,x5.shape[0],x5.shape[1],1])
+        conv5 = (tf.nn.conv2d(x5, smooth, strides=[1,1,1,1], padding='SAME'))
+
+        # x_out = tf.reduce_sum([conv1,conv2,conv3,conv4,conv5])
+        x_out = conv1 + conv2 + conv3 + conv4 + conv5
         # print('debug: ',x)
         print(x_out)
         return tf.squeeze(x_out)
