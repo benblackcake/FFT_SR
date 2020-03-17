@@ -31,5 +31,5 @@ def imshow(img):
 
 def imshow_spectrum(fftimg):
     magnitude_spectrum = 20 * np.log(np.abs(fftimg))
-    plt.imshow(fftimg, cmap='gray')
+    plt.imshow(magnitude_spectrum, cmap='gray')
     plt.show()
