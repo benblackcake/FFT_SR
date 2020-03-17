@@ -11,8 +11,8 @@ if __name__ == '__main__':
     img = cv2.imread(img,cv2.IMREAD_GRAYSCALE)
     img = img/255
     print(img.shape)
-    hr_img = fft(img)*(1e3*1e-5)
-    lr_img = fft(up_sample(bicubic(img)))*(1e3*1e-5)
+    hr_img = fft(img)
+    lr_img = fft(up_sample(bicubic(img)))
 
 
     # img = img.reshape([1,256,256,1])
@@ -23,12 +23,12 @@ if __name__ == '__main__':
         print(type(out))
         out = np.asarray(out)
         out = np.squeeze(out)
-        imshow_spectrum(out/(1e3*1e-5))
+        imshow_spectrum(out)
 
         out = ifft(out)/(1e3*1e-5)
 
         out = out *255
-        out = np.clip(out,0,255)
+        out = np.clip(out)
         print(out.shape)
         imshow(out)
         print(out)
