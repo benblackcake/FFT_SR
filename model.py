@@ -53,9 +53,9 @@ class FFTSR:
 
 
         self.pred = self.model()
-        self.loss = tf.nn.l2_loss(self.label - self.pred)
+        # self.loss = tf.nn.l2_loss(self.label - self.pred)
         # print(self.pred)
-        # self.loss = tf.reduce_mean(tf.square(self.label - self.pred))
+        self.loss = tf.reduce_mean(tf.square(self.label - self.pred))
         # print('build_model_image_shape',self.images)
 
     def conv_(self,x):
