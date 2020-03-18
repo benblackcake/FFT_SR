@@ -117,7 +117,8 @@ class FFTSR:
 
         # Drop the batch dimension to keep things consistent with the other conv_op functions
         w = tf.squeeze(w, [0])  # channels, filters, height, width
-
+        w = tf.reduce_sum(w, reduction_indices=2)
+        print('__debug__squeeze_w',w)
         # Compute a spatial encoding of the filter for visualization
         spatial_filter = tf.ifft2d(w)
 
@@ -175,6 +176,7 @@ class FFTSR:
 
             print(x)
         w = self.sess.run([self.spectral_c1],feed_dict={self.images: lr_img, self.label:hr_img})
+
         print(w)
         result = self.pred.eval({self.images: lr_img})
         result = result*255
