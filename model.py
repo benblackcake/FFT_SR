@@ -178,5 +178,6 @@ class FFTSR:
         print(w)
         result = self.pred.eval({self.images: lr_img})
         result = result*255
+        imshow_spectrum(w)
         imshow(result*255)
         print(result)
