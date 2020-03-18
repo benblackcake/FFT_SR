@@ -33,3 +33,7 @@ def imshow_spectrum(fftimg):
     magnitude_spectrum = 20 * np.log(np.abs(fftimg))
     plt.imshow(magnitude_spectrum, cmap='gray')
     plt.show()
+
+
+def L2_loss(y_true,y_pre):
+    return np.sum(np.square(y_true-y_pre))

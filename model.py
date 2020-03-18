@@ -1,9 +1,9 @@
 
 
 import tensorflow as tf
-from utils import fft
+from utils import fft,L2_loss
 import numpy as np
-from utils import imshow
+from utils import imshow,imshow_spectrum
 
 class FFTSR:
 
@@ -19,110 +19,151 @@ class FFTSR:
         self.images = tf.placeholder(tf.float32, [256, 256], name='input_img')
         self.label = tf.placeholder(tf.float32, [256, 256], name='HR_img')
 
-
-        # self.images = tf.reshape(self.images,[1, 256, 256, 1])
-        # self.label = tf.reshape(self.label, [1, 256, 256, 1])
-        # w1= tf.placeholder(tf.random_normal([None, None], stddev=1e-3), name='w1'),
-
-        #self.w1 = tf.placeholder(tf.float32,[None,None], name='w_1')
-        #self.w1 = self.w1 + tf.random_normal(tf.shape(self.w1))
-
-        self.weights = {
-            'w1': tf.Variable(tf.random_normal([256, 256],  stddev=1e-3), name='w1'),
-            'w2': tf.Variable(tf.random_normal([256, 256], stddev=1e-3), name='w2'),
-            'w3': tf.Variable(tf.random_normal([256, 256], stddev=1e-3), name='w3'),
-            'w4': tf.Variable(tf.random_normal([256, 256], stddev=1e-3), name='w4'),
-            'w5': tf.Variable(tf.random_normal([256, 256], stddev=1e-3), name='w5')
-        }
-
-        self.biases = {
-            'b1': tf.Variable(tf.zeros([256, 256], name='b1')),
-            'b2': tf.Variable(tf.zeros([256, 256], name='b2')),
-            'b3': tf.Variable(tf.zeros([256, 256], name='b3')),
-            'b4': tf.Variable(tf.zeros([256, 256], name='b4')),
-            'b5': tf.Variable(tf.zeros([256, 256], name='b5'))
-
-        }
-
-        self.smooth = {
-            's1': tf.Variable(tf.random_normal([5, 5,1,1], stddev=1e-3),name='s1'),
-            's2': tf.Variable(tf.random_normal([5,5,1,1], stddev=1e-3), name='s2'),
-            's3': tf.Variable(tf.random_normal([5,5,1,1], stddev=1e-3), name='s3'),
-            's4': tf.Variable(tf.random_normal([5,5,1,1], stddev=1e-3), name='s4'),
-            's5': tf.Variable(tf.random_normal([5,5,1,1], stddev=1e-3), name='s5')
-        }
-
+        self.image_matrix = tf.reshape(self.images, shape=[-1, 256, 256, 1])
 
         self.pred = self.model()
         self.loss = tf.nn.l2_loss(self.label - self.pred)
+        # squared_deltas = tf.square(self.label - self.pred)
+        # self.loss = L2_loss(self.label, self.pred)
         # print(self.pred)
         # self.loss = tf.reduce_mean(tf.square(self.label - self.pred))
         # print('build_model_image_shape',self.images)
 
-    def conv_(self,x,weights,biases,smooth):
-
-        x = tf.cast(x,tf.complex128)
-        weights = tf.cast(weights,tf.complex128)
-        biases = tf.cast(biases,tf.complex128)
-        # smooth = tf.cast(smooth,tf.complex128)
-
-
-        x1 = (tf.math.multiply(x, weights) + biases)
-        x1 = tf.reshape(x1,[1,x1.shape[0],x1.shape[1],1])
-        x1 = tf.cast(x1, tf.float32)
-        conv1 = (tf.nn.conv2d(x1, smooth, strides=[1,1,1,1], padding='SAME'))
-
-
-        x2 = (tf.math.multiply(x, weights) + biases)
-        x2 = tf.reshape(x2,[1,x2.shape[0],x2.shape[1],1])
-        x2 = tf.cast(x2, tf.float32)
-        conv2 = (tf.nn.conv2d(x2, smooth, strides=[1,1,1,1], padding='SAME'))
-
-        x3 = (tf.math.multiply(x, weights) + biases)
-        x3 = tf.reshape(x3,[1,x3.shape[0],x3.shape[1],1])
-        x3 = tf.cast(x3, tf.float32)
-        conv3 = (tf.nn.conv2d(x3, smooth, strides=[1,1,1,1], padding='SAME'))
-
-        x4 = (tf.math.multiply(x, weights) + biases)
-        x4 = tf.reshape(x4,[1,x4.shape[0],x4.shape[1],1])
-        x4 = tf.cast(x4, tf.float32)
-
-        conv4 = (tf.nn.conv2d(x4, smooth, strides=[1,1,1,1], padding='SAME'))
-
-        x5 = (tf.math.multiply(x, weights) + biases)
-        x5 = tf.reshape(x5,[1,x5.shape[0],x5.shape[1],1])
-        x5 = tf.cast(x5, tf.float32)
-        conv5 = (tf.nn.conv2d(x5, smooth, strides=[1,1,1,1], padding='SAME'))
-
-        # x_out = tf.reduce_sum([conv1,conv2,conv3,conv4,conv5])
-        x_out = conv1+conv2+conv3+conv4+conv5
-        # print('debug: ',x)
-        print(x_out)
-        return tf.squeeze(x_out)
-
-
 
     def model(self):
         # x = None
-        f1 = self.conv_(self.images,self.weights['w1'],self.biases['b1'],self.smooth['s1'])
-        f2 = self.conv_(f1, self.weights['w2'],self.biases['b2'],self.smooth['s2'])
-        f3 = self.conv_(f2, self.weights['w3'],self.biases['b3'],self.smooth['s3'])
-        f4 = self.conv_(f3, self.weights['w4'],self.biases['b4'],self.smooth['s4'])
-        f5 = self.conv_(f4,self.weights['w5'],self.biases['b5'],self.smooth['s5'])
-        # f6 = self.conv_(f5, self.weights['w6'],self.biases['b1'],self.smooth['s1'])
+        f1,self.spatial_c1,self.spectral_c1 = self.fft_conv_pure(self.image_matrix,filters=5,width=256,height=256)
+        # f1_smooth,_,_ = self.fft_conv(f1,filters=5,width=5,height=5,stride=1,name='f1_smooth')
 
-        # print("debug ->",f1)
-        fout = f1+f2+f3+f4+f5
-        # fout = f1
-        # fout = tf.transpose(fout)
-        p = fout * self.weights['w5']
-        I_star = p+f1
+        print('__debug__spatial_c1',self.spatial_c1)
+        return f1
+    #
+    # def fft_conv(self, source, filters, width, height, stride, activation='relu', name='fft_conv'):
+    #     # This function implements a convolution using a spectrally parameterized filter with the normal
+    #     # tf.nn.conv2d() convolution operation. This is done by transforming the spectral filter to spatial
+    #     # via tf.ifft2d()
+    #
+    #     channels = source.get_shape().as_list()[3]
+    #
+    #     with tf.variable_scope(name):
+    #         init = self.random_spatial_to_spectral(channels, filters, height, width)
+    #         # Option 1: Over-Parameterize fully in the spectral domain
+    #         w_real = tf.Variable(init.real, dtype=tf.float32, name='real')
+    #         w_imag = tf.Variable(init.imag, dtype=tf.float32, name='imag')
+    #         w = tf.cast(tf.complex(w_real, w_imag), tf.complex64)
+    #
+    #         # Option 2: Parameterize only 'free' parameters in the spectral domain to enforce conjugate symmetry
+    #         #		   This is very slow.
+    #         # w = self.spectral_to_variable(init)
+    #
+    #         b = tf.Variable(tf.constant(0.1, shape=[filters]))
+    #
+    #     # Transform the spectral parameters into a spatial filter
+    #     # and reshape for tf.nn.conv2d
+    #     complex_spatial_filter = tf.ifft2d(w)
+    #     spatial_filter = tf.real(complex_spatial_filter)
+    #     spatial_filter = tf.transpose(spatial_filter, [2, 3, 0, 1])
+    #
+    #     conv = tf.nn.conv2d(source, spatial_filter, strides=[1, stride, stride, 1], padding='SAME')
+    #     output = tf.nn.bias_add(conv, b)
+    #     output = tf.nn.relu(output) if activation is 'relu' else output
+    #
+    #     return output, spatial_filter, w
 
-        return I_star
+    def fft_conv_pure(self, source, filters, width, height, activation='relu'):
+        # This function applies the convolutional filter, which is stored in the spectral domain, as a element-wise
+        # multiplication between the filter and the image (which has been transformed to the spectral domain)
+
+        batch_size, input_height, input_width, depth = source.get_shape().as_list()
+
+        # self.sess.run(tf.global_variables_initializer())
+
+        init = self.random_spatial_to_spectral(batch_size, height, width,filters)
+        print('shape',init.shape)
+
+            # if name in self.initialization:
+            #     init = self.initialization[name]
+
+            # Option 1: Over-Parameterize fully in the spectral domain
+        w_real = tf.Variable(init.real, dtype=tf.float32, name='real')
+        w_imag = tf.Variable(init.imag, dtype=tf.float32, name='imag')
+        w = tf.cast(tf.complex(w_real, w_imag), tf.complex64,name = 'w_complex') # (batch_size,img_width,img_high,c_dim,filter)
+
+
+        b = tf.Variable(tf.constant(0.1, shape=[filters]))
+        print('__debug__w: ',w)
+        print('__debug__b: ',b)
+
+        # Add batch as a dimension for later broadcasting
+        # w = tf.expand_dims(w, 0)  # batch, channels, filters, height, width
+        print(source)
+        source = tf.tile(source,[1,1,1,filters])
+        print('__debug__source: ', source)
+
+        # Prepare the source tensor for FFT
+        # source = tf.transpose(source, [0, , 1, 2])  # batch, channel, height, width
+        source_fft = tf.fft2d(tf.complex(source, 0.0 * source))
+        print('__debug__source_fft',source_fft)
+
+
+        conv = source_fft * tf.conj(w)
+
+        # Sum out the channel dimension, and prepare for bias_add
+        # Note: The decision to sum out the channel dimension seems intuitive, but
+        #	   not necessarily theoretically sound.
+        conv = tf.real(tf.ifft2d(conv))
+        # conv = tf.reduce_sum(conv, reduction_indices=3)  # batch, filters, height, width
+        print('__debug__conv',conv)
+
+        # Drop the batch dimension to keep things consistent with the other conv_op functions
+        w = tf.squeeze(w, [0])  # channels, filters, height, width
+
+        # Compute a spatial encoding of the filter for visualization
+        spatial_filter = tf.ifft2d(w)
+
+
+        # Add the bias (in the spatial domain)
+        output = tf.nn.bias_add(conv, b)
+        output = tf.nn.relu(output) if activation is 'relu' else output
+        output = tf.reduce_sum(output, reduction_indices=3)  # batch, filters, height, width
+
+        print('__debug__output',output)
+        output = tf.squeeze(output)
+        return output, spatial_filter, w
+
+
+
+    def random_spatial_to_spectral(self, batch_size, height, width, filters):
+        # Create a truncated random image, then compute the FFT of that image and return it's values
+        # used to initialize spectrally parameterized filters
+        # an alternative to this is to initialize directly in the spectral domain
+        w = tf.truncated_normal([batch_size,height,width,filters], mean=0, stddev=0.01)
+        fft_ = tf.fft2d(tf.complex(w, 0.0 * w), name='spectral_initializer')
+        return fft_.eval(session=self.sess)
+
+    def batch_fftshift2d(self, tensor):
+        # Shifts high frequency elements into the center of the filter
+        indexes = len(tensor.get_shape()) - 1
+        top, bottom = tf.split(tensor, 2, indexes - 1)
+        tensor = tf.concat([bottom, top], indexes - 1)
+        left, right = tf.split(tensor, 2, indexes)
+        tensor = tf.concat([right, left], indexes)
+
+        return tensor
+
+    def batch_ifftshift2d(self, tensor):
+        # Shifts high frequency elements into the center of the filter
+        indexes = len(tensor.get_shape()) - 1
+        left, right = tf.split(tensor, 2, indexes)
+        tensor = tf.concat([right, left], indexes)
+        top, bottom = tf.split(tensor, 2, indexes - 1)
+        tensor = tf.concat([bottom, top], indexes - 1)
+
+        return tensor
 
     def run(self,hr_img,lr_img):
         self.train_op = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.loss)
-        tf.initialize_all_variables().run()
+        self.sess.run(tf.global_variables_initializer())
         print('run: ->',hr_img.shape)
         # shape = np.zeros(hr_img.shape)
         # err_ = []
@@ -130,11 +171,11 @@ class FFTSR:
         for er in range(self.epoch):
             # image = tf.reshape(image,[image.shape[0],image.shape[1]])
             _,x = self.sess.run([self.train_op,self.loss],feed_dict={self.images: lr_img, self.label:hr_img})
-            # w = self.sess.run([self.w1],feed_dict={self.w1:shape})
+            # w = self.sess.run([self.model()],feed_dict={self.images: lr_img, self.label:hr_img})
+            print(x)
             # print(w)
 
-            # imshow(x_out)
-            print(x)
-        # return x_out
-        #imshow()
-            # print(t)
+        result = self.pred.eval({self.images: lr_img})
+        result = result*255
+        imshow(result*255)
+        print(result)

@@ -9,28 +9,20 @@ from matplotlib import pyplot as plt
 if __name__ == '__main__':
     img = 'images_train/butterfly.bmp'
     img = cv2.imread(img,cv2.IMREAD_GRAYSCALE)
-    img = img/255
+
     print(img.shape)
-    hr_img = fft(img)
-    lr_img = fft(up_sample(bicubic(img)))
-    imshow_spectrum(lr_img)
+
+
 
     # img = img.reshape([1,256,256,1])
     with tf.Session() as sess:
+        hr_img = (img)/255.0
+        lr_img = (up_sample(bicubic(img)))/255.0
+        # imshow_spectrum(lr_img)
         fftsr = FFTSR(sess, 1e-4, 10000)
+
         # fftsr.build_model()
         fftsr.run(hr_img,lr_img)
-        out = sess.run([fftsr.model()],feed_dict={fftsr.images: lr_img, fftsr.label: hr_img})
 
-        print(type(out))
-        out = np.asarray(out)
-        out = np.squeeze(out)
-        imshow_spectrum(out)
-
-        out = ifft(out)
-
-        out = out *255
-        out = np.clip(out,0,255)
-        print(out.shape)
-        imshow(out)
-        print(out)
+        # out = fftsr.pred
+        # print(out)
