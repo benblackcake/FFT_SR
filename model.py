@@ -177,9 +177,10 @@ class FFTSR:
             print(x)
         w = self.sess.run([self.spectral_c1],feed_dict={self.images: lr_img, self.label:hr_img})
         w =np.squeeze(w)
+        w = w /(1e3*1e-5)
         print(w)
         result = self.pred.eval({self.images: lr_img})
-        result = result*255
+        result = result*255/(1e3*1e-5)
         imshow_spectrum(w)
-        imshow(result*255)
+        imshow(result)
         print(result)
