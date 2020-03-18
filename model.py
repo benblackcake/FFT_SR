@@ -19,7 +19,7 @@ class FFTSR:
         self.images = tf.placeholder(tf.float32, [256, 256], name='input_img')
         self.label = tf.placeholder(tf.float32, [256, 256], name='HR_img')
 
-        self.image_matrix = tf.reshape(self.images, shape=[-1, 256, 256, 1])
+        # self.image_matrix = tf.reshape(self.images, shape=[-1, 256, 256, 1])
 
         self.pred = self.model()
         self.loss = tf.nn.l2_loss(self.label - self.pred)
@@ -32,9 +32,12 @@ class FFTSR:
 
     def model(self):
         # x = None
-        f1,self.spatial_c1,self.spectral_c1 = self.fft_conv_pure(self.image_matrix,filters=5,width=256,height=256)
-        # f1_smooth,_,_ = self.fft_conv(f1,filters=5,width=5,height=5,stride=1,name='f1_smooth')
+        f1,self.spatial_c1,self.spectral_c1 = self.fft_conv_pure(self.images,filters=5,width=256,height=256)
+        f2,self.spatial_c2,self.spectral_c2 = self.fft_conv_pure(f1,filters=5,width=256,height=256)
 
+        # f1_smooth,_,_ = self.fft_conv(f1,filters=5,width=5,height=5,stride=1,name='f1_smooth')
+        f_ = self.spectral_c1 +self.spectral_c2
+        f_ = tf.real(tf.ifft2d(f_))
         print('__debug__spatial_c1',self.spatial_c1)
         return f1
     #
@@ -73,7 +76,7 @@ class FFTSR:
     def fft_conv_pure(self, source, filters, width, height, activation='relu'):
         # This function applies the convolutional filter, which is stored in the spectral domain, as a element-wise
         # multiplication between the filter and the image (which has been transformed to the spectral domain)
-
+        source = tf.reshape(source,shape=[-1,256,256,1])
         batch_size, input_height, input_width, depth = source.get_shape().as_list()
 
         # self.sess.run(tf.global_variables_initializer())
