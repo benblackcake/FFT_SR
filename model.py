@@ -171,10 +171,11 @@ class FFTSR:
         for er in range(self.epoch):
             # image = tf.reshape(image,[image.shape[0],image.shape[1]])
             _,x = self.sess.run([self.train_op,self.loss],feed_dict={self.images: lr_img, self.label:hr_img})
-            # w = self.sess.run([self.model()],feed_dict={self.images: lr_img, self.label:hr_img})
-            print(x)
-            # print(w)
 
+
+            print(x)
+        w = self.sess.run([self.spectral_c1],feed_dict={self.images: lr_img, self.label:hr_img})
+        print(w)
         result = self.pred.eval({self.images: lr_img})
         result = result*255
         imshow(result*255)
