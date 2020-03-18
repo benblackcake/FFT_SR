@@ -39,7 +39,7 @@ class FFTSR:
         f_ = self.spectral_c1 +self.spectral_c2
         f_ = tf.real(tf.ifft2d(f_))
         print('__debug__spatial_c1',self.spatial_c1)
-        return f1
+        return f_
     #
     # def fft_conv(self, source, filters, width, height, stride, activation='relu', name='fft_conv'):
     #     # This function implements a convolution using a spectrally parameterized filter with the normal

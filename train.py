@@ -19,7 +19,7 @@ if __name__ == '__main__':
         hr_img = (img)/255.0 *(1e3*1e-5)
         lr_img = (up_sample(bicubic(img)))/255.0 *(1e3*1e-5)
         # imshow_spectrum(lr_img)
-        fftsr = FFTSR(sess, 1e-4, 100000)
+        fftsr = FFTSR(sess, 1e-4, 10000)
 
         # fftsr.build_model()
         fftsr.run(hr_img,lr_img)
