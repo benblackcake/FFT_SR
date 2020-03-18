@@ -184,6 +184,7 @@ class FFTSR:
         print(w)
         result = self.pred.eval({self.images: lr_img})
         result = result*255/(1e3*1e-5)
+        result = np.clip(result, 0.0, 255.0).astype(np.uint8)
         imshow_spectrum(w)
         imshow(result)
         print(result)
