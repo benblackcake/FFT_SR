@@ -26,8 +26,8 @@ def up_sample(img,scale =2):
 
 def imshow(img):
     # magnitude_spectrum = 20 * np.log(np.abs(img))
-    plt.imshow(img, cmap='gray')
-    plt.show()
+    cv2.imshow(img, cmap='gray')
+    cv2.show()
 
 def imshow_spectrum(fftimg):
     magnitude_spectrum = 20 * np.log(np.abs(fftimg))
