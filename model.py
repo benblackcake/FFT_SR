@@ -176,7 +176,7 @@ class FFTSR:
 
             print(x)
         w = self.sess.run([self.spectral_c1],feed_dict={self.images: lr_img, self.label:hr_img})
-
+        w =np.squeeze(w)
         print(w)
         result = self.pred.eval({self.images: lr_img})
         result = result*255
