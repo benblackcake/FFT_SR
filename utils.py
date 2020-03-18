@@ -27,7 +27,7 @@ def up_sample(img,scale =2):
 def imshow(img):
     # magnitude_spectrum = 20 * np.log(np.abs(img))
     cv2.imshow('test',img)
-    cv2.show()
+    cv2.waitKey(0)
 
 def imshow_spectrum(fftimg):
     magnitude_spectrum = 20 * np.log(np.abs(fftimg))
