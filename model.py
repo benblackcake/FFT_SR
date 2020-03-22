@@ -59,6 +59,8 @@ class FFTSR:
         # self.sess.run(tf.global_variables_initializer())
 
         init = self.random_spatial_to_spectral(batch_size, height, width,filters)
+        init_smooth = self.random_spatial_to_spectral(filters, filters, filters, filters)
+
         print('shape',init.shape)
 
             # if name in self.initialization:
@@ -69,10 +71,16 @@ class FFTSR:
         w_imag = tf.Variable(init.imag, dtype=tf.float32, name='imag')
         w = tf.cast(tf.complex(w_real, w_imag), tf.complex64,name = 'w_complex') # (batch_size,img_width,img_high,c_dim,filter)
 
+        w_smooth_real = tf.Variable(init_smooth.real, dtype=tf.float32, name='real')
+        w_smooth_imag = tf.Variable(init_smooth.imag, dtype=tf.float32, name='imag')
+        w_smooth = tf.cast(tf.complex(w_smooth_real, w_smooth_imag), tf.complex64)
+        w_smooth_spatial_filter = tf.ifft2d(w_smooth)
+        w_smooth_spatial_filter = tf.real(tf.transpose(w_smooth_spatial_filter, [2, 3, 0, 1]))
 
         b = tf.Variable(tf.constant(0.1, shape=[filters]))
         print('__debug__w: ',w)
         print('__debug__b: ',b)
+        print('w_smooth_spatial_filter: ',w_smooth_spatial_filter)
 
         # Add batch as a dimension for later broadcasting
         # w = tf.expand_dims(w, 0)  # batch, channels, filters, height, width
@@ -95,6 +103,7 @@ class FFTSR:
         # conv = tf.reduce_sum(conv, reduction_indices=3)  # batch, filters, height, width
         print('__debug__conv',conv)
 
+        conv = tf.nn.conv2d(conv, w_smooth_spatial_filter, strides=[1, 1, 1, 1], padding='SAME')
         # Drop the batch dimension to keep things consistent with the other conv_op functions
         w = tf.squeeze(w, [0])  # channels, filters, height, width
         w = tf.reduce_sum(w, reduction_indices=2)
