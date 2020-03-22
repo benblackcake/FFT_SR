@@ -24,6 +24,13 @@ def bicubic(img,scale = 2):
 def up_sample(img,scale =2):
     return cv2.resize(img, None, fx= scale, fy= scale, interpolation=cv2.INTER_CUBIC)
 
+
+def plt_imshow(img):
+    # magnitude_spectrum = 20 * np.log(np.abs(img))
+    plt.imshow(img, cmap='gray')
+    plt.show()
+
+
 def imshow(img):
     # magnitude_spectrum = 20 * np.log(np.abs(img))
     cv2.imshow('test',img)

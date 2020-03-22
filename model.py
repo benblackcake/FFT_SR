@@ -3,7 +3,7 @@
 import tensorflow as tf
 from utils import fft,L2_loss
 import numpy as np
-from utils import imshow,imshow_spectrum
+from utils import imshow,imshow_spectrum,plt_imshow
 
 class FFTSR:
 
@@ -160,5 +160,5 @@ class FFTSR:
         result = result*255/(1e3*1e-5)
         result = np.clip(result, 0.0, 255.0).astype(np.uint8)
         imshow_spectrum(w)
-        imshow(result)
+        plt_imshow(result)
         print(result)
