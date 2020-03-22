@@ -54,11 +54,11 @@ class FFTSR:
         # This function applies the convolutional filter, which is stored in the spectral domain, as a element-wise
         # multiplication between the filter and the image (which has been transformed to the spectral domain)
         source = tf.reshape(source,shape=[-1,256,256,1])
-        batch_size, input_height, input_width, depth = source.get_shape().as_list()
+        _, input_height, input_width, channels = source.get_shape().as_list()
 
         # self.sess.run(tf.global_variables_initializer())
 
-        init = self.random_spatial_to_spectral(batch_size, height, width,filters)
+        init = self.random_spatial_to_spectral(channels, filters, height, width)
         print('shape',init.shape)
 
             # if name in self.initialization:
@@ -73,16 +73,21 @@ class FFTSR:
         b = tf.Variable(tf.constant(0.1, shape=[filters]))
         print('__debug__w: ',w)
         print('__debug__b: ',b)
+        w = tf.expand_dims(w, 0)  # batch, channels, filters, height, width
 
         # Add batch as a dimension for later broadcasting
         # w = tf.expand_dims(w, 0)  # batch, channels, filters, height, width
         print(source)
-        source = tf.tile(source,[1,1,1,filters])
         print('__debug__source: ', source)
 
         # Prepare the source tensor for FFT
         # source = tf.transpose(source, [0, , 1, 2])  # batch, channel, height, width
+        source = tf.transpose(source, [0, 3, 1, 2])  # batch, channel, height, width (1,1,256,256)
         source_fft = tf.fft2d(tf.complex(source, 0.0 * source))
+
+        # Prepare the FFTd input tensor for element-wise multiplication with filter
+        source_fft = tf.expand_dims(source_fft, 2)  # batch, channels, filters, height, width
+        source_fft = tf.tile(source_fft, [1, 1, filters, 1, 1]) # (1,1,5,256,256)
         print('__debug__source_fft',source_fft)
 
 
@@ -92,12 +97,14 @@ class FFTSR:
         # Note: The decision to sum out the channel dimension seems intuitive, but
         #	   not necessarily theoretically sound.
         conv = tf.abs(tf.ifft2d(conv))
+        conv = tf.reduce_sum(conv, reduction_indices=1)
+        conv = tf.transpose(conv, [0, 2, 3, 1])
         # conv = tf.reduce_sum(conv, reduction_indices=3)  # batch, filters, height, width
         print('__debug__conv',conv)
 
         # Drop the batch dimension to keep things consistent with the other conv_op functions
         w = tf.squeeze(w, [0])  # channels, filters, height, width
-        w = tf.reduce_sum(w, reduction_indices=2)
+        w = tf.reduce_sum(w, reduction_indices=1)
         print('__debug__squeeze_w',w)
         # Compute a spatial encoding of the filter for visualization
         spatial_filter = tf.ifft2d(w)
