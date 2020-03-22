@@ -170,5 +170,6 @@ class FFTSR:
         imshow_spectrum(self.sess.run(tf.fft2d(result)))
         # plt_imshow(result)
         result = np.clip(result, 0.0, 255.0).astype(np.uint8)
+        imshow(result)
         plt_imshow(result)
         print(result)
