@@ -167,7 +167,7 @@ class FFTSR:
 
         result = self.pred.eval({self.images: lr_img})
         result = result*255/(1e3*1e-5)
-        # imshow_spectrum(w)
+        imshow_spectrum(self.sess.run(tf.fft2d(result)))
         # plt_imshow(result)
         result = np.clip(result, 0.0, 255.0).astype(np.uint8)
         plt_imshow(result)
