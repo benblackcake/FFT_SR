@@ -90,7 +90,7 @@ class FFTSR:
         # Sum out the channel dimension, and prepare for bias_add
         # Note: The decision to sum out the channel dimension seems intuitive, but
         #	   not necessarily theoretically sound.
-        conv = tf.real(tf.ifft2d(conv))
+        conv = tf.abs(tf.ifft2d(conv))
         # conv = tf.reduce_sum(conv, reduction_indices=3)  # batch, filters, height, width
         print('__debug__conv',conv)
 
