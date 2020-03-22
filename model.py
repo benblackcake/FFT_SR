@@ -44,38 +44,7 @@ class FFTSR:
         f_ = tf.real(tf.ifft2d(f_))
         print('__debug__spatial_c1',self.spatial_c1)
         return f_
-    #
-    # def fft_conv(self, source, filters, width, height, stride, activation='relu', name='fft_conv'):
-    #     # This function implements a convolution using a spectrally parameterized filter with the normal
-    #     # tf.nn.conv2d() convolution operation. This is done by transforming the spectral filter to spatial
-    #     # via tf.ifft2d()
-    #
-    #     channels = source.get_shape().as_list()[3]
-    #
-    #     with tf.variable_scope(name):
-    #         init = self.random_spatial_to_spectral(channels, filters, height, width)
-    #         # Option 1: Over-Parameterize fully in the spectral domain
-    #         w_real = tf.Variable(init.real, dtype=tf.float32, name='real')
-    #         w_imag = tf.Variable(init.imag, dtype=tf.float32, name='imag')
-    #         w = tf.cast(tf.complex(w_real, w_imag), tf.complex64)
-    #
-    #         # Option 2: Parameterize only 'free' parameters in the spectral domain to enforce conjugate symmetry
-    #         #		   This is very slow.
-    #         # w = self.spectral_to_variable(init)
-    #
-    #         b = tf.Variable(tf.constant(0.1, shape=[filters]))
-    #
-    #     # Transform the spectral parameters into a spatial filter
-    #     # and reshape for tf.nn.conv2d
-    #     complex_spatial_filter = tf.ifft2d(w)
-    #     spatial_filter = tf.real(complex_spatial_filter)
-    #     spatial_filter = tf.transpose(spatial_filter, [2, 3, 0, 1])
-    #
-    #     conv = tf.nn.conv2d(source, spatial_filter, strides=[1, stride, stride, 1], padding='SAME')
-    #     output = tf.nn.bias_add(conv, b)
-    #     output = tf.nn.relu(output) if activation is 'relu' else output
-    #
-    #     return output, spatial_filter, w
+
 
     def fft_conv_pure(self, source, filters, width, height, activation='relu'):
         # This function applies the convolutional filter, which is stored in the spectral domain, as a element-wise
@@ -187,8 +156,8 @@ class FFTSR:
         w = w /(1e3*1e-5)
         print(w)
         result = self.pred.eval({self.images: lr_img})
-        result = result*255/(1e3*1e-5)
-        result = np.clip(result, 0.0, 255.0).astype(np.uint8)
+        # result = result*255/(1e3*1e-5)
+        # result = np.clip(result, 0.0, 255.0).astype(np.uint8)
         imshow_spectrum(w)
         imshow(result)
         print(result)
