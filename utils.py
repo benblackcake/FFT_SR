@@ -37,7 +37,7 @@ def imshow(img):
     cv2.waitKey(0)
 
 def imshow_spectrum(fftimg):
-    magnitude_spectrum = (np.real(fftimg))
+    magnitude_spectrum = np.log(np.real(fftimg))
     plt.imshow(magnitude_spectrum, cmap='gray')
     plt.show()
 
