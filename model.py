@@ -108,6 +108,7 @@ class FFTSR:
         w = tf.squeeze(w, [0])  # channels, filters, height, width
         w = tf.reduce_sum(w, reduction_indices=2)
         print('__debug__squeeze_w',w)
+        print('__debug__w_smooth_spatial_filter',w_smooth_spatial_filter)
         # Compute a spatial encoding of the filter for visualization
         spatial_filter = tf.ifft2d(w)
 
@@ -165,11 +166,11 @@ class FFTSR:
 
             print(x)
 
-        result = self.pred.eval({self.images: lr_img})
-        result = result*255/(1e3*1e-5)
-        imshow_spectrum(self.sess.run(tf.fft2d(result)))
-        # plt_imshow(result)
-        result = np.clip(result, 0.0, 255.0).astype(np.uint8)
-        imshow(result)
-        plt_imshow(result)
-        print(result)
+            result = self.pred.eval({self.images: lr_img})
+            result = result*255/(1e3*1e-5)
+            imshow_spectrum(self.sess.run(tf.fft2d(result)))
+            # plt_imshow(result)
+            result = np.clip(result, 0.0, 255.0).astype(np.uint8)
+            imshow(result)
+            plt_imshow(result)
+            print(result)
