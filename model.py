@@ -41,6 +41,7 @@ class FFTSR:
 
         # f1_smooth,_,_ = self.fft_conv(f1,filters=5,width=5,height=5,stride=1,name='f1_smooth')
         f_ = self.spectral_c1 +self.spectral_c2 +self.spectral_c3+self.spectral_c4
+        f_ =f_*self.spectral_c4
         f_ = tf.real(tf.ifft2d(f_))
         print('__debug__spatial_c1',self.spatial_c1)
         return f_
@@ -157,7 +158,7 @@ class FFTSR:
         print(w)
         result = self.pred.eval({self.images: lr_img})
         result = result*255/(1e3*1e-5)
-        # result = np.clip(result, 0.0, 255.0).astype(np.uint8)
+        result = np.clip(result, 0.0, 255.0).astype(np.uint8)
         imshow_spectrum(w)
         imshow(result)
         print(result)
