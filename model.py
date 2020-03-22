@@ -23,8 +23,8 @@ class FFTSR:
 
         self.pred = self.model()
 
-        label = self.label - self.images
-        self.loss = tf.nn.l2_loss(label - self.pred)
+        self.label = self.label - self.images
+        self.loss = tf.nn.l2_loss(self.label - self.pred)
         # squared_deltas = tf.square(self.label - self.pred)
         # self.loss = L2_loss(self.label, self.pred)
         # print(self.pred)
@@ -40,9 +40,10 @@ class FFTSR:
         f4,self.spatial_c4,self.spectral_c4 = self.fft_conv_pure(f3,filters=5,width=256,height=256)
 
         # f1_smooth,_,_ = self.fft_conv(f1,filters=5,width=5,height=5,stride=1,name='f1_smooth')
-        f_ = self.spectral_c1 +self.spectral_c2 +self.spectral_c3+self.spectral_c4
-        f_ =f_*self.spectral_c4
-        f_ = tf.real(tf.ifft2d(f_))
+        # f_ = self.spectral_c1 +self.spectral_c2 +self.spectral_c3+self.spectral_c4
+        f_ = f1+f2+f3+f4
+        # f_ =f_*self.spectral_c4
+        # f_ = tf.real(tf.ifft2d(f_))
         print('__debug__spatial_c1',self.spatial_c1)
         return f_
 
