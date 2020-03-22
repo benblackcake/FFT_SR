@@ -163,10 +163,10 @@ class FFTSR:
 
             print(x)
 
-            result = self.pred.eval({self.images: lr_img})
-            result = result*255/(1e3*1e-5)
-            # imshow_spectrum(w)
-            plt_imshow(np.squeeze(result))
-            result = np.clip(result, 0.0, 255.0).astype(np.uint8)
-            # imshow(result)
-            print(result)
+        result = self.pred.eval({self.images: lr_img})
+        result = result*255/(1e3*1e-5)
+        # imshow_spectrum(w)
+        plt_imshow(np.squeeze(result))
+        result = np.clip(result, 0.0, 255.0).astype(np.uint8)
+        # imshow(result)
+        print(result)
