@@ -23,8 +23,8 @@ class FFTSR:
 
         self.pred = self.model()
 
-        label = self.label - self.images
-        self.loss = tf.nn.l2_loss(label - self.pred)
+        label_residual = self.label - self.images
+        self.loss = tf.nn.l2_loss(label_residual - self.pred)
         # squared_deltas = tf.square(self.label - self.pred)
         # self.loss = L2_loss(self.label, self.pred)
         # print(self.pred)
