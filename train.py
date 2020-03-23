@@ -25,6 +25,6 @@ if __name__ == '__main__':
         # fftsr.build_model()
         res = fftsr.run(hr_img[:, :, 0], lr_img[:, :, 0])
 
-        lr_img[:,:,:0] = res
+        lr_img[:,:,0] = res
         # out = fftsr.pred
         # print(out)
