@@ -36,5 +36,6 @@ if __name__ == '__main__':
         print('lr_img[:,:,0].shape',lr_img[:,:,0].shape)
 
         print(lr_img.shape)
+        lr_img = lr_img.astype(np.uint8)
         lr_img = cv2.cvtColor(lr_img, cv2.COLOR_YCR_CB2RGB)
         plt_imshow(lr_img)
