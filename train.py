@@ -3,7 +3,7 @@ from model import FFTSR
 import tensorflow as tf
 import numpy as np
 import cv2
-from utils import fft, bicubic, up_sample,imshow,ifft,imshow_spectrum
+from utils import fft, bicubic, up_sample,imshow,ifft,imshow_spectrum,plt_imshow
 from matplotlib import pyplot as plt
 
 if __name__ == '__main__':
@@ -26,5 +26,7 @@ if __name__ == '__main__':
         res = fftsr.run(hr_img[:, :, 0], lr_img[:, :, 0])
 
         lr_img[:,:,0] = res
+        plt_imshow(lr_img)
+
         # out = fftsr.pred
         # print(out)
