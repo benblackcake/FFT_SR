@@ -29,6 +29,6 @@ if __name__ == '__main__':
         res = fftsr.run(hr_img[:, :, 0], lr_img[:, :, 0])
         lr_img = lr_img*255/(1e3*1e-5)
         lr_img[:,:,0] = res
-
+        print(lr_img.shape)
         lr_img = cv2.cvtColor(lr_img, cv2.COLOR_YCR_CB2RGB)
         plt_imshow(lr_img)
