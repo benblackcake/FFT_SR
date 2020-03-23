@@ -37,7 +37,8 @@ if __name__ == '__main__':
         print('sr_img[:,:,0].shape',sr_img[:,:,0].shape)
 
         print(lr_img.shape)
-        sr_img = lr_img.astype(np.uint8)
+        sr_img = sr_img.astype(np.uint8)
+        lr_img = lr_img.astype(np.uint8)
         sr_img = cv2.cvtColor(sr_img, cv2.COLOR_YCR_CB2RGB)
         lr_img = cv2.cvtColor(lr_img, cv2.COLOR_YCR_CB2RGB)
 
