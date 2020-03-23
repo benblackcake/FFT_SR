@@ -30,6 +30,7 @@ if __name__ == '__main__':
         sr_img = lr_img
         print('res shape: ',res.shape)
         sr_img = sr_img*255/(1e3*1e-5)
+        lr_img = lr_img*255/(1e3*1e-5)
         print('sr_img[:,:,0]',sr_img[:,:,0])
         print('sr_img[:,:,0].shape',sr_img[:,:,0].shape)
         sr_img[:,:,0] = sr_img[:,:,0] + res
