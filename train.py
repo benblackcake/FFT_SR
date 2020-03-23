@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # img = cv2.imread(img,cv2.IMREAD_GRAYSCALE)
     img = cv2.imread(img)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2YCR_CB)
-    print(img.shape)
+    print('origin_img_shape',img.shape)
 
 
 
