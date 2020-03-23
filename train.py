@@ -19,14 +19,16 @@ if __name__ == '__main__':
     with tf.Session() as sess:
         hr_img = (img)/255.0 *(1e3*1e-5)
         lr_img = (up_sample(bicubic(img)))/255.0 *(1e3*1e-5)
-        # imshow_spectrum(lr_img)
+        # lr_img = (up_sample(bicubic(img)))
+
+
+        # # imshow_spectrum(lr_img)
         fftsr = FFTSR(sess, 1e-4, 15000)
 
         # fftsr.build_model()
         res = fftsr.run(hr_img[:, :, 0], lr_img[:, :, 0])
 
         lr_img[:,:,0] = res
-        plt_imshow(lr_img)
 
-        # out = fftsr.pred
-        # print(out)
+        lr_img = cv2.cvtColor(lr_img, cv2.COLOR_YCR_CB2RGB)
+        plt_imshow(lr_img)
