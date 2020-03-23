@@ -4,7 +4,17 @@ import tensorflow as tf
 import numpy as np
 import cv2
 from utils import fft, bicubic, up_sample,imshow,ifft,imshow_spectrum,plt_imshow
+import argparse
+from tqdm import tqdm,trange
 from matplotlib import pyplot as plt
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--learning-rate', type=float, default=1e-4, help='Learning rate for Adam.')
+    parser.add_argument('--epoch', type=int, default='1000000', help='How many iterations ')
+    args = parser.parse_args()
+
 
 if __name__ == '__main__':
     img = 'images_train/butterfly.bmp'
