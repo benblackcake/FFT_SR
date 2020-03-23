@@ -15,11 +15,11 @@ def main():
     parser.add_argument('--epoch', type=int, default='10000', help='How many iterations ')
     args = parser.parse_args()
 
-    lr_images = tf.placeholder(tf.float32, [None,None], name='lr_images')
-    hr_images = tf.placeholder(tf.float32, [None, None], name='hr_images')
+    lr_images = tf.placeholder(tf.float32, [256,256], name='lr_images')
+    hr_images = tf.placeholder(tf.float32, [256, 256], name='hr_images')
 
     init_feed_ = tf.Variable(tf.ones([10,10]))
-    print(init_feed_.shape)
+    # print(init_feed_.shape)
     img = 'images_train/butterfly.bmp'
     # img = cv2.imread(img,cv2.IMREAD_GRAYSCALE)
     img = cv2.imread(img)
@@ -34,25 +34,22 @@ def main():
 
 
     with tf.Session() as sess:
-        sess.run(tf.local_variables_initializer())
-        sess.run(tf.global_variables_initializer())
 
-        lr = sess.run(lr_images,feed_dict={lr_images: lr_img[:, :, 0]})
-        hr = sess.run(hr_images,feed_dict={hr_images: hr_img[:, :, 0]})
-        lr = tf.Variable(lr)
-        hr = tf.Variable(hr)
 
-        sr_forward = fftsr.model(lr)
+        sr_forward = fftsr.model(lr_images)
         # sr_forward = fftsr.model(lr_images)
         loss = fftsr.loss_function(hr_images - lr_images, sr_forward)
         sr_opt = fftsr.optimizer(loss)
         print('lr_images',lr_images)
         print('hr_images',hr_images)
-        print(lr)
-        print(hr)
 
-        _, err = sess.run([sr_opt, loss],
-                          feed_dict={lr_images: lr, hr_images: hr})
+        sess.run(tf.local_variables_initializer())
+        sess.run(tf.global_variables_initializer())
+
+        for epoch in range(args.epoch):
+            _, err = sess.run([sr_opt, loss],
+                            feed_dict={lr_images: lr_img[:, :, 0], hr_images: hr_img[:, :, 0]})
+            print('error: ',err)
 
 
 if __name__ == '__main__':
