@@ -173,5 +173,6 @@ class FFTSR:
         result = np.clip(result, 0.0, 255.0).astype(np.uint8)
         imshow(result)
         plt_imshow(result)
-        plt_imshow(result+(self.images*255/(1e3*1e-5)))
-        print(result)
+        lr = self.sess.run([self.images],feed_dict={self.images: lr_img, self.label:hr_img})
+        print(result+(np.asarray(lr)*255/(1e3*1e-5)))
+        # plt_imshow(result+(self.images*255/(1e3*1e-5)))
