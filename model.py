@@ -175,4 +175,4 @@ class FFTSR:
         plt_imshow(result)
         lr = self.sess.run([self.images],feed_dict={self.images: lr_img, self.label:hr_img})
         print(result+(np.asarray(lr)*255/(1e3*1e-5)))
-        # plt_imshow(result+(self.images*255/(1e3*1e-5)))
+        plt_imshow(result+(np.asarray(np.squeeze(lr))*255/(1e3*1e-5)))
