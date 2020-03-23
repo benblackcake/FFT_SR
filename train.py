@@ -23,7 +23,8 @@ if __name__ == '__main__':
         fftsr = FFTSR(sess, 1e-4, 15000)
 
         # fftsr.build_model()
-        fftsr.run(hr_img[:, :, 0], lr_img[:, :, 0])
+        res = fftsr.run(hr_img[:, :, 0], lr_img[:, :, 0])
 
+        lr_img[:,:,:0] = res
         # out = fftsr.pred
         # print(out)
