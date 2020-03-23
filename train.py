@@ -30,8 +30,10 @@ if __name__ == '__main__':
         print('res shape: ',res.shape)
         lr_img = lr_img*255/(1e3*1e-5)
         print('lr_img[:,:,0]',lr_img[:,:,0])
+        print('lr_img[:,:,0].shape',lr_img[:,:,0].shape)
         lr_img[:,:,0] = lr_img[:,:,0] + res
         print('after add result',lr_img[:,:,0])
+        print('lr_img[:,:,0].shape',lr_img[:,:,0].shape)
 
         print(lr_img.shape)
         # lr_img = cv2.cvtColor(lr_img, cv2.COLOR_YCR_CB2RGB)
