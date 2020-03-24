@@ -15,8 +15,8 @@ def main():
     parser.add_argument('--epoch', type=int, default='10000', help='How many iterations ')
     args = parser.parse_args()
 
-    lr_images = tf.placeholder(tf.float32, [256,256], name='lr_images')
-    hr_images = tf.placeholder(tf.float32, [256, 256], name='hr_images')
+    lr_images = tf.placeholder(tf.float32, [1,None,None,1], name='lr_images')
+    hr_images = tf.placeholder(tf.float32, [1,None, None,1], name='hr_images')
 
     init_feed_ = tf.Variable(tf.ones([10,10]))
     # print(init_feed_.shape)
@@ -35,20 +35,27 @@ def main():
 
     with tf.Session() as sess:
 
+        print('ref_lr_images',lr_images)
+        print('ref_hr_images',hr_images)
 
+        # lr_images = sess.run(lr_images,feed_dict={lr_images:[[10,10],[10,10]]})
         sr_forward = fftsr.model(lr_images)
         # sr_forward = fftsr.model(lr_images)
         loss = fftsr.loss_function(hr_images - lr_images, sr_forward)
         sr_opt = fftsr.optimizer(loss)
-        print('lr_images',lr_images)
-        print('hr_images',hr_images)
 
-        sess.run(tf.local_variables_initializer())
         sess.run(tf.global_variables_initializer())
-
+        # sess.run(tf.local_variables_initializer())
+        # init = (tf.global_variables_initializer())
+        # sess.run(init,feed_dict={lr_images})
         for epoch in range(args.epoch):
+            lr_img_input = lr_img[:,:,0]
+            hr_img_input = hr_img[:,:,0]
+            lr_img_input = tf.reshape(lr_img_input[:, :, 0], shape=[1,lr_img[:,:,0].shape[0],lr_img[:,:,0].shape[1],1])
+            hr_img_input = tf.reshape(hr_img_input[:, :, 0], shape=[1,hr_img[:,:,0].shape[0],hr_img[:,:,0].shape[1],1])
+
             _, err = sess.run([sr_opt, loss],
-                            feed_dict={lr_images: lr_img[:, :, 0], hr_images: hr_img[:, :, 0]})
+                            feed_dict={lr_images: lr_img_input, hr_images: hr_img_input})
             print('error: ',err)
 
 
