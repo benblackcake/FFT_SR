@@ -73,8 +73,8 @@ def main():
 
     with tf.Session() as sess:
 
-        nx, ny = input_setup(args.image_size, args.scale, True, args.checkpoint_dir)
-        data_dir = checkpoint_dir(True, args.checkpoint_dir)
+        nx, ny = input_setup(args.image_size, args.scale, args.is_train, args.checkpoint_dir)
+        data_dir = checkpoint_dir(args.is_train, args.checkpoint_dir)
         input_, label_ = read_data(data_dir)
         print('input_.shape',input_.shape)
         print('input_.shape',label_.shape)
