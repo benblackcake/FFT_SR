@@ -205,7 +205,7 @@ def merge(images, size, c_dim=None):
     print(h,w)
     print(h*size[0], w*size[1])
     
-    if c_dim not None:
+    if c_dim not '':
         img = np.zeros((h*size[0], w*size[1], c_dim))
         for idx, image in enumerate(images):
             i = idx % size[1]
