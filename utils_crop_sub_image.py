@@ -197,7 +197,7 @@ def make_data_hf(input_,label_,is_train, checkpoint_dir):
         hf.create_dataset('input', data=input_)
         hf.create_dataset('label', data=label_)
 
-def merge(images, size, c_dim=None):
+def merge(images, size, c_dim=0):
     """
          merge the sub image set to SR img
     """
@@ -205,7 +205,7 @@ def merge(images, size, c_dim=None):
     print(h,w)
     print(h*size[0], w*size[1])
     
-    if c_dim is not '':
+    if c_dim ==3:
         img = np.zeros((h*size[0], w*size[1], c_dim))
         for idx, image in enumerate(images):
             i = idx % size[1]
