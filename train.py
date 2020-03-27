@@ -16,7 +16,7 @@ def load(sess, saver, checkpoint_dir):
         To load the checkpoint use to test or pretrain
     """
     print("\nReading Checkpoints.....\n\n")
-    model_dir = "%s_%s" % ("srcnn", 33)# give the model name by label_size
+    model_dir = "%s_%s" % ("FFTSR", 33)# give the model name by label_size
     checkpoint_dir = os.path.join(checkpoint_dir, model_dir)
     ckpt = tf.train.get_checkpoint_state(checkpoint_dir)
     print(checkpoint_dir)
