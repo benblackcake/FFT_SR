@@ -121,6 +121,9 @@ def main():
             print(result)
             print(result.shape)
 
+            print(result_img)
+            print(result_img.shape)
+
 if __name__ == '__main__':
 
     main()
