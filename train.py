@@ -115,7 +115,11 @@ def main():
             # in_ = np.reshape(input_[:,:,:,0],[input_.shape[0]])
             in_ = input_[:,:,:,0]
             result = sr_forward.eval({lr_images: in_})
+
+            #result_img = merge(result, [nx, ny])
+
             print(result)
+            print(result.shape)
 
 if __name__ == '__main__':
 
