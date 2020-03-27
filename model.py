@@ -23,13 +23,16 @@ class FFTSR:
 
     def model(self, x):
         # x = None
-        _, w, h, _= x.get_shape().as_list()
-        f1,self.spatial_c1,self.spectral_c1 = self.fft_conv_pure(x,filters=5,width=w,height=h)
-        f2,self.spatial_c2,self.spectral_c2 = self.fft_conv_pure(f1,filters=5,width=w,height=h)
-        f3,self.spatial_c3,self.spectral_c3 = self.fft_conv_pure(f2,filters=5,width=w,height=h)
-        f4,self.spatial_c4,self.spectral_c4 = self.fft_conv_pure(f3,filters=5,width=w,height=h)
-        f5,self.spatial_c5,self.spectral_c5 = self.fft_conv_pure(f4,filters=5,width=w,height=h)
-        f6,self.spatial_c6,self.spectral_c6 = self.fft_conv_pure(f5,filters=5,width=w,height=h)
+        batch_size, w, h= x.get_shape().as_list()
+        if batch_size == None:
+            batch_size = 1
+
+        f1,self.spatial_c1,self.spectral_c1 = self.fft_conv_pure(x,filters=5,width=w,height=h, batch_size = batch_size)
+        f2,self.spatial_c2,self.spectral_c2 = self.fft_conv_pure(f1,filters=5,width=w,height=h, batch_size = batch_size)
+        f3,self.spatial_c3,self.spectral_c3 = self.fft_conv_pure(f2,filters=5,width=w,height=h, batch_size = batch_size)
+        f4,self.spatial_c4,self.spectral_c4 = self.fft_conv_pure(f3,filters=5,width=w,height=h, batch_size = batch_size)
+        f5,self.spatial_c5,self.spectral_c5 = self.fft_conv_pure(f4,filters=5,width=w,height=h, batch_size = batch_size)
+        f6,self.spatial_c6,self.spectral_c6 = self.fft_conv_pure(f5,filters=5,width=w,height=h, batch_size = batch_size)
 
         # f1_smooth,_,_ = self.fft_conv(f1,filters=5,width=5,height=5,stride=1,name='f1_smooth')
         # f_ = self.spectral_c1 +self.spectral_c2 +self.spectral_c3+self.spectral_c4 +self.spectral_c5+self.spectral_c6
@@ -40,29 +43,30 @@ class FFTSR:
         return f_
 
 
-    def fft_conv_pure(self, source, filters, width, height, activation='relu'):
+    def fft_conv_pure(self, source, filters, width, height, batch_size, activation='relu'):
         # This function applies the convolutional filter, which is stored in the spectral domain, as a element-wise
         # multiplication between the filter and the image (which has been transformed to the spectral domain)
 
-        # source = tf.reshape(source,shape=[-1,width,height,1])
-        batch_size, input_height, input_width, depth = source.get_shape().as_list()
+        source = tf.reshape(source,shape=[-1,width,height,1])
+        print('__DENUG__source_shape',source)
+        # batch_size, input_height, input_width, depth = source.get_shape().as_list()
 
         # self.sess.run(tf.global_variables_initializer())
+        with tf.variable_scope('fft_conv'):
+            init = self.random_spatial_to_spectral(batch_size, height, width,filters)
+            init_smooth = self.random_spatial_to_spectral(filters, filters, filters, filters)
 
-        init = self.random_spatial_to_spectral(batch_size, height, width,filters)
-        init_smooth = self.random_spatial_to_spectral(filters, filters, filters, filters)
+            w_real = tf.Variable(init.real, dtype=tf.float32, name='real', validate_shape=False)
+            w_imag = tf.Variable(init.imag, dtype=tf.float32, name='imag', validate_shape=False)
+            w = tf.cast(tf.complex(w_real, w_imag), tf.complex64,name = 'w_complex') # (batch_size,img_width,img_high,c_dim,filter)
 
-        w_real = tf.Variable(init.real, dtype=tf.float32, name='real', validate_shape=False)
-        w_imag = tf.Variable(init.imag, dtype=tf.float32, name='imag', validate_shape=False)
-        w = tf.cast(tf.complex(w_real, w_imag), tf.complex64,name = 'w_complex') # (batch_size,img_width,img_high,c_dim,filter)
+            w_smooth_real = tf.Variable(init_smooth.real, dtype=tf.float32, name='real')
+            w_smooth_imag = tf.Variable(init_smooth.imag, dtype=tf.float32, name='imag')
+            w_smooth = tf.cast(tf.complex(w_smooth_real, w_smooth_imag), tf.complex64)
+            w_smooth_spatial_filter = tf.ifft2d(w_smooth)
+            w_smooth_spatial_filter = tf.abs(tf.transpose(w_smooth_spatial_filter, [2, 3, 0, 1]))
 
-        w_smooth_real = tf.Variable(init_smooth.real, dtype=tf.float32, name='real')
-        w_smooth_imag = tf.Variable(init_smooth.imag, dtype=tf.float32, name='imag')
-        w_smooth = tf.cast(tf.complex(w_smooth_real, w_smooth_imag), tf.complex64)
-        w_smooth_spatial_filter = tf.ifft2d(w_smooth)
-        w_smooth_spatial_filter = tf.abs(tf.transpose(w_smooth_spatial_filter, [2, 3, 0, 1]))
-
-        b = tf.Variable(tf.constant(0.1, shape=[filters]))
+            b = tf.Variable(tf.constant(0.1, shape=[filters]))
         print('__debug__w: ',w)
         print('__debug__b: ',b)
         print('w_smooth_spatial_filter: ',w_smooth_spatial_filter)
@@ -117,6 +121,8 @@ class FFTSR:
         # w = tf.Variable(tf.truncated_normal([batch_size,height,width,filters], mean=0, stddev=0.01),validate_shape=False)
         fft_ = tf.fft2d(tf.complex(w, 0.0 * w), name='spectral_initializer')
         return fft_.eval(session=tf.Session())
+        # return fft_
+
 
     def batch_fftshift2d(self, tensor):
         # Shifts high frequency elements into the center of the filter

@@ -4,6 +4,7 @@ import tensorflow as tf
 import numpy as np
 import cv2
 from utils import fft, bicubic, up_sample,imshow,ifft,imshow_spectrum,plt_imshow
+from utils_crop_sub_image import*
 import argparse
 from tqdm import tqdm,trange
 from matplotlib import pyplot as plt
@@ -13,50 +14,56 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--learning-rate', type=float, default=1e-4, help='Learning rate for Adam.')
     parser.add_argument('--epoch', type=int, default='10000', help='How many iterations ')
+    parser.add_argument('--image-size', type=int, default=33, help='Size of random crops used for training samples.')
+    parser.add_argument('--c-dim', type=int, default=3, help='The size of channel')
+    parser.add_argument('--scale', type=int, default=2, help='the size of scale factor for preprocessing input image')
+    parser.add_argument('--checkpoint-dir', type=str, default='checkpoint', help='Name of checkpoint directory')
+    parser.add_argument('--result_dir', type=str, default='result', help='Name of result directory')
+    parser.add_argument('--test-img', type=str, default='', help='test_img')
+    parser.add_argument('--is-train', action='store_true', help='training')
+    parser.add_argument('--batch-size', type=int, default=128, help='Mini-batch size.')
+
+
     args = parser.parse_args()
 
-    lr_images = tf.placeholder(tf.float32, [1,None,None,1], name='lr_images')
-    hr_images = tf.placeholder(tf.float32, [1,None, None,1], name='hr_images')
-
-    init_feed_ = tf.Variable(tf.ones([10,10]))
-    # print(init_feed_.shape)
-    img = 'images_train/butterfly.bmp'
-    # img = cv2.imread(img,cv2.IMREAD_GRAYSCALE)
-    img = cv2.imread(img)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2YCR_CB)
-    hr_img = (img)/255.0 *(1e3*1e-5)
-    lr_img = (up_sample(bicubic(img)))/255.0 *(1e3*1e-5)
-    # lr_img = (up_sample(bicubic(img)))
-
+    lr_images = tf.placeholder(tf.float32, [None,33,33], name='lr_images')
+    hr_images = tf.placeholder(tf.float32, [None,33,33], name='hr_images')
 
     fftsr = FFTSR(learning_rate=args.learning_rate)
+    sr_forward = fftsr.model(lr_images)
+    # sr_forward = fftsr.model(lr_images)
+    loss = fftsr.loss_function(hr_images - lr_images, sr_forward)
+    sr_opt = fftsr.optimizer(loss)
 
 
 
     with tf.Session() as sess:
 
-        print('ref_lr_images',lr_images)
-        print('ref_hr_images',hr_images)
-
-        # lr_images = sess.run(lr_images,feed_dict={lr_images:[[10,10],[10,10]]})
-        sr_forward = fftsr.model(lr_images)
-        # sr_forward = fftsr.model(lr_images)
-        loss = fftsr.loss_function(hr_images - lr_images, sr_forward)
-        sr_opt = fftsr.optimizer(loss)
-
+        nx, ny = input_setup(args.image_size, args.scale, True, args.checkpoint_dir)
+        data_dir = checkpoint_dir(True, args.checkpoint_dir)
+        input_, label_ = read_data(data_dir)
+        print('input_.shape',input_.shape)
+        print('input_.shape',label_.shape)
         sess.run(tf.global_variables_initializer())
         # sess.run(tf.local_variables_initializer())
         # init = (tf.global_variables_initializer())
         # sess.run(init,feed_dict={lr_images})
         for epoch in range(args.epoch):
-            lr_img_input = lr_img[:,:,0]
-            hr_img_input = hr_img[:,:,0]
-            lr_img_input = tf.reshape(lr_img_input[:, :, 0], shape=[1,lr_img[:,:,0].shape[0],lr_img[:,:,0].shape[1],1])
-            hr_img_input = tf.reshape(hr_img_input[:, :, 0], shape=[1,hr_img[:,:,0].shape[0],hr_img[:,:,0].shape[1],1])
 
-            _, err = sess.run([sr_opt, loss],
-                            feed_dict={lr_images: lr_img_input, hr_images: hr_img_input})
-            print('error: ',err)
+            batch_idxs = len(input_) // args.batch_size
+            # print(len(input_))
+            for idx in range(0, batch_idxs):
+                batch_images = input_[idx * args.batch_size : (idx + 1) * args.batch_size]
+                batch_labels = label_[idx * args.batch_size : (idx + 1) * args.batch_size]
+
+                b_images = np.reshape(batch_images[:,:,:,0],[128,33,33])
+                b_labels = np.reshape(batch_labels[:,:,:,0],[128,33,33])
+                # print(b_images.shape)
+                # print(b_labels.shape)
+
+                _, err = sess.run([sr_opt, loss],
+                                feed_dict={lr_images: b_images, hr_images: b_labels})
+                print('error: ',err)
 
 
 if __name__ == '__main__':
