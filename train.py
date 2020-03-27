@@ -54,7 +54,7 @@ def main():
     parser.add_argument('--checkpoint-dir', type=str, default='checkpoint', help='Name of checkpoint directory')
     parser.add_argument('--result_dir', type=str, default='result', help='Name of result directory')
     parser.add_argument('--test-img', type=str, default='', help='test_img')
-    parser.add_argument('--is-train', action='store_true', help='training')
+    parser.add_argument('--is-train', type=int, default=1, help='training')
     parser.add_argument('--batch-size', type=int, default=128, help='Mini-batch size.')
 
 
@@ -88,27 +88,34 @@ def main():
         load(sess, saver, args.checkpoint_dir)
         pbar = tqdm(range(args.epoch),bar_format='{l_bar}{bar:10}{r_bar}{bar:-10b}')
 
+        if args.is_train:
+            for epoch in pbar:
 
-        for epoch in pbar:
+                batch_idxs = len(input_) // args.batch_size
+                # print(len(input_))
+                for idx in range(0, batch_idxs):
+                    batch_images = input_[idx * args.batch_size : (idx + 1) * args.batch_size]
+                    batch_labels = label_[idx * args.batch_size : (idx + 1) * args.batch_size]
 
-            batch_idxs = len(input_) // args.batch_size
-            # print(len(input_))
-            for idx in range(0, batch_idxs):
-                batch_images = input_[idx * args.batch_size : (idx + 1) * args.batch_size]
-                batch_labels = label_[idx * args.batch_size : (idx + 1) * args.batch_size]
+                    b_images = np.reshape(batch_images[:,:,:,0],[128,33,33])
+                    b_labels = np.reshape(batch_labels[:,:,:,0],[128,33,33])
+                    # print(b_images.shape)
+                    # print(b_labels.shape)
 
-                b_images = np.reshape(batch_images[:,:,:,0],[128,33,33])
-                b_labels = np.reshape(batch_labels[:,:,:,0],[128,33,33])
-                # print(b_images.shape)
-                # print(b_labels.shape)
-
-                _, err = sess.run([sr_opt, loss],
-                                feed_dict={lr_images: b_images, hr_images: b_labels})
-                counter +=1
-                # print('error: ',err)
-                pbar.set_description('[ERROR %.8f]'% err)
-                if counter % 500 == 0:
-                    save(sess, saver, args.checkpoint_dir, counter)
+                    _, err = sess.run([sr_opt, loss],
+                                    feed_dict={lr_images: b_images, hr_images: b_labels})
+                    counter +=1
+                    # print('error: ',err)
+                    pbar.set_description('[ERROR %.8f]'% err)
+                    if counter % 500 == 0:
+                        save(sess, saver, args.checkpoint_dir, counter)
+        else:
+            print("Now Start Testing...")
+            print("nx","ny",nx,ny)
+            # in_ = np.reshape(input_[:,:,:,0],[input_.shape[0]])
+            in_ = input_[:,:,:,0]
+            result = sr_forward.eval({lr_images: in_})
+            print(result)
 
 if __name__ == '__main__':
 
