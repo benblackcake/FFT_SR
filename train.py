@@ -11,24 +11,24 @@ from matplotlib import pyplot as plt
 import os
 import time
 
-def load(checkpoint_dir):
+def load(sess, saver, checkpoint_dir):
     """
         To load the checkpoint use to test or pretrain
     """
     print("\nReading Checkpoints.....\n\n")
-    model_dir = "%s_%s" % ("srcnn", self.label_size)# give the model name by label_size
+    model_dir = "%s_%s" % ("srcnn", 33)# give the model name by label_size
     checkpoint_dir = os.path.join(checkpoint_dir, model_dir)
     ckpt = tf.train.get_checkpoint_state(checkpoint_dir)
     
     # Check the checkpoint is exist 
     if ckpt and ckpt.model_checkpoint_path:
         ckpt_path = str(ckpt.model_checkpoint_path) # convert the unicode to string
-        self.saver.restore(self.sess, os.path.join(os.getcwd(), ckpt_path))
+        saver.restore(sess, os.path.join(os.getcwd(), ckpt_path))
         print("\n Checkpoint Loading Success! %s\n\n"% ckpt_path)
     else:
         print("\n! Checkpoint Loading Failed \n\n")
 
-def save(checkpoint_dir, step):
+def save(sess, saver, checkpoint_dir, step):
     """
         To save the checkpoint use to test or pretrain
     """
@@ -39,7 +39,7 @@ def save(checkpoint_dir, step):
     if not os.path.exists(checkpoint_dir):
          os.makedirs(checkpoint_dir)
 
-    self.saver.save(self.sess,
+    saver.save(sess,
                     os.path.join(checkpoint_dir, model_name),
                     global_step=step)
 
@@ -82,9 +82,12 @@ def main():
         # sess.run(tf.local_variables_initializer())
         # init = (tf.global_variables_initializer())
         # sess.run(init,feed_dict={lr_images})
+        saver = tf.train.Saver()
+
         counter = 0
-        load(args.checkpoint_dir)
+        load(sess, saver, args.checkpoint_dir)
         pbar = tqdm(range(args.epoch),bar_format='{l_bar}{bar:10}{r_bar}{bar:-10b}')
+
 
         for epoch in pbar:
 
@@ -105,7 +108,7 @@ def main():
                 # print('error: ',err)
                 pbar.set_description('[ERROR %.8f]'% err)
                 if counter % 500 == 0:
-                    save(args.checkpoint_dir, counter)
+                    save(sess, saver, args.checkpoint_dir, counter)
 
 if __name__ == '__main__':
 
