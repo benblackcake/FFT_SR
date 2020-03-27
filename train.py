@@ -48,7 +48,7 @@ def main():
         # sess.run(tf.local_variables_initializer())
         # init = (tf.global_variables_initializer())
         # sess.run(init,feed_dict={lr_images})
-        for epoch in range(args.epoch):
+        for epoch in tqdm(range(args.epoch)):
 
             batch_idxs = len(input_) // args.batch_size
             # print(len(input_))
