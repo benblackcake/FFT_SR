@@ -19,11 +19,10 @@ def load(sess, saver, checkpoint_dir):
     model_dir = "%s_%s" % ("srcnn", 33)# give the model name by label_size
     checkpoint_dir = os.path.join(checkpoint_dir, model_dir)
     ckpt = tf.train.get_checkpoint_state(checkpoint_dir)
-    
+    print(checkpoint_dir)
     # Check the checkpoint is exist 
     if ckpt and ckpt.model_checkpoint_path:
         ckpt_path = str(ckpt.model_checkpoint_path) # convert the unicode to string
-        print(ckpt_path)
         saver.restore(sess, os.path.join(os.getcwd(), ckpt_path))
         print("\n Checkpoint Loading Success! %s\n\n"% ckpt_path)
     else:
