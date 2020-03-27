@@ -118,10 +118,17 @@ def main():
 
             result = sr_forward.eval({lr_images: in_lr})
 
-            result_hr = merge(input_,[nx, ny],c_dim=3)
+            result_lr = merge(input_,[nx, ny],c_dim=3)
             result_img = merge(result, [nx, ny])
 
-            checkimage(result_hr *255/(1e3*1e-5))
+            checkimage(result_lr *255/(1e3*1e-5))
+
+            sr_ = result_lr
+            sr_ = sr_ *255/(1e3*1e-5)
+
+            
+            sr_[:,:,0] = sr_[:,:,0] + np.clip(result_img, 0.0, 255.0).astype(np.uint8)
+            
             print(result)
             print(result.shape)
 
