@@ -48,20 +48,20 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--learning-rate', type=float, default=1e-4, help='Learning rate for Adam.')
     parser.add_argument('--epoch', type=int, default='10000', help='How many iterations ')
-    parser.add_argument('--image-size', type=int, default=33, help='Size of random crops used for training samples.')
+    parser.add_argument('--image-size', type=int, default=100, help='Size of random crops used for training samples.')
     parser.add_argument('--c-dim', type=int, default=3, help='The size of channel')
     parser.add_argument('--scale', type=int, default=2, help='the size of scale factor for preprocessing input image')
     parser.add_argument('--checkpoint-dir', type=str, default='checkpoint', help='Name of checkpoint directory')
     parser.add_argument('--result_dir', type=str, default='result', help='Name of result directory')
     parser.add_argument('--test-img', type=str, default='', help='test_img')
     parser.add_argument('--is-train', type=int, default=1, help='training')
-    parser.add_argument('--batch-size', type=int, default=128, help='Mini-batch size.')
+    parser.add_argument('--batch-size', type=int, default=16, help='Mini-batch size.')
 
 
     args = parser.parse_args()
 
-    lr_images = tf.placeholder(tf.float32, [None,33,33], name='lr_images')
-    hr_images = tf.placeholder(tf.float32, [None,33,33], name='hr_images')
+    lr_images = tf.placeholder(tf.float32, [None,100,100], name='lr_images')
+    hr_images = tf.placeholder(tf.float32, [None,100,100], name='hr_images')
 
     fftsr = FFTSR(learning_rate=args.learning_rate)
     sr_forward = fftsr.model(lr_images)
@@ -97,8 +97,10 @@ def main():
                     batch_images = input_[idx * args.batch_size : (idx + 1) * args.batch_size]
                     batch_labels = label_[idx * args.batch_size : (idx + 1) * args.batch_size]
 
-                    b_images = np.reshape(batch_images[:,:,:,0],[128,33,33])
-                    b_labels = np.reshape(batch_labels[:,:,:,0],[128,33,33])
+                    # b_images = np.reshape(batch_images[:,:,:,0],[128,33,33])
+                    # b_labels = np.reshape(batch_labels[:,:,:,0],[128,33,33])
+                    b_images = batch_images[:,:,:,0]
+                    b_labels = batch_labels[:,:,:,0]
                     # print(b_images.shape)
                     # print(b_labels.shape)
 
