@@ -131,7 +131,7 @@ def main():
             sr_[:,:,0] = sr_[:,:,0] + residual
 
             checkimage(sr_)
-            print(result)
+            print(result_img)
             print(result.shape)
             plt_imshow(residual)
             print(result_img)
