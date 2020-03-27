@@ -23,6 +23,7 @@ def load(sess, saver, checkpoint_dir):
     # Check the checkpoint is exist 
     if ckpt and ckpt.model_checkpoint_path:
         ckpt_path = str(ckpt.model_checkpoint_path) # convert the unicode to string
+        print(ckpt_path)
         saver.restore(sess, os.path.join(os.getcwd(), ckpt_path))
         print("\n Checkpoint Loading Success! %s\n\n"% ckpt_path)
     else:
