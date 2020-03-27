@@ -36,6 +36,7 @@ def imsave(image, path, config):
 
     
 def checkimage(image):
+    image = cv2.cvtColor(image, cv2.COLOR_YCR_CB2BGR)
     cv2.imshow("test",image)
     cv2.waitKey(0)
 
@@ -196,25 +197,29 @@ def make_data_hf(input_,label_,is_train, checkpoint_dir):
         hf.create_dataset('input', data=input_)
         hf.create_dataset('label', data=label_)
 
-def merge(images, size):
+def merge(images, size, c_dim=None):
     """
          merge the sub image set to SR img
     """
     h, w = images.shape[1], images.shape[2]
     print(h,w)
     print(h*size[0], w*size[1])
-    img = np.zeros((h*size[0], w*size[1]))
-    for idx, image in enumerate(images):
-        i = idx % size[1]
-        j = idx // size[1]
-        #print(i,j)
-        img[j * h : j * h + h,i * w : i * w + w] = image
-        # print('j * h,j * h + h')
-        # print(j * h,j * h + h)
-        # print('i * w, i * w + w')
-        # print(i * w, i * w + w)
-        # cv2.imshow("srimg",img)
-        # cv2.waitKey(0)
+    
+    if c_dim not None:
+        img = np.zeros((h*size[0], w*size[1], c_dim))
+        for idx, image in enumerate(images):
+            i = idx % size[1]
+            j = idx // size[1]
+            #print(i,j)
+            img[j * h : j * h + h,i * w : i * w + w, :] = image
+    else:
+        img = np.zeros((h*size[0], w*size[1]))
+        for idx, image in enumerate(images):
+            i = idx % size[1]
+            j = idx // size[1]
+            #print(i,j)
+            img[j * h : j * h + h,i * w : i * w + w] = image
+
         
     return img
 

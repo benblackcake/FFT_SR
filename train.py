@@ -113,11 +113,15 @@ def main():
             print("Now Start Testing...")
             print("nx","ny",nx,ny)
             # in_ = np.reshape(input_[:,:,:,0],[input_.shape[0]])
-            in_ = input_[:,:,:,0]
-            result = sr_forward.eval({lr_images: in_})
+            in_lr = input_[:,:,:,0]
+            in_hr = input_
 
+            result = sr_forward.eval({lr_images: in_lr})
+
+            result_hr = merge(input_,[nx, ny],c_dim=3)
             result_img = merge(result, [nx, ny])
 
+            checkimage(result_hr *255/(1e3*1e-5))
             print(result)
             print(result.shape)
 
