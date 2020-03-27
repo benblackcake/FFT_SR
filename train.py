@@ -116,7 +116,7 @@ def main():
             in_ = input_[:,:,:,0]
             result = sr_forward.eval({lr_images: in_})
 
-            #result_img = merge(result, [nx, ny])
+            result_img = merge(result, [nx, ny])
 
             print(result)
             print(result.shape)
