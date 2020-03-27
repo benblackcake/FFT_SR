@@ -48,7 +48,8 @@ def main():
         # sess.run(tf.local_variables_initializer())
         # init = (tf.global_variables_initializer())
         # sess.run(init,feed_dict={lr_images})
-        for epoch in tqdm(range(args.epoch)):
+        pbar = tqdm(range(args.epoch))
+        for epoch in pbar:
 
             batch_idxs = len(input_) // args.batch_size
             # print(len(input_))
@@ -63,7 +64,8 @@ def main():
 
                 _, err = sess.run([sr_opt, loss],
                                 feed_dict={lr_images: b_images, hr_images: b_labels})
-                print('error: ',err)
+                # print('error: ',err)
+                pbar.set_description('[ERROR %s]'% err)
 
 
 if __name__ == '__main__':
