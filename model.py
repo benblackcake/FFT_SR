@@ -49,7 +49,8 @@ class FFTSR:
         # This function applies the convolutional filter, which is stored in the spectral domain, as a element-wise
         # multiplication between the filter and the image (which has been transformed to the spectral domain)
 
-        source = tf.reshape(source,shape=[-1,width,height,1])
+        # source = tf.reshape(source,shape=[-1,width,height,1])
+        source = tf.expand_dims(source,3)
         print('__DENUG__source_shape',source)
         # batch_size, input_height, input_width, depth = source.get_shape().as_list()
 
