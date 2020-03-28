@@ -48,7 +48,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--learning-rate', type=float, default=1e-4, help='Learning rate for Adam.')
     parser.add_argument('--epoch', type=int, default='10000', help='How many iterations ')
-    parser.add_argument('--image-size', type=int, default=100, help='Size of random crops used for training samples.')
+    parser.add_argument('--image-size', type=int, default=33, help='Size of random crops used for training samples.')
     parser.add_argument('--c-dim', type=int, default=3, help='The size of channel')
     parser.add_argument('--scale', type=int, default=2, help='the size of scale factor for preprocessing input image')
     parser.add_argument('--checkpoint-dir', type=str, default='checkpoint', help='Name of checkpoint directory')
