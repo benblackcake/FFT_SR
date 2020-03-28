@@ -53,7 +53,11 @@ class FFTSR:
     def fft_conv_pure(self, source, filters, width, height, activation='relu'):
         # This function applies the convolutional filter, which is stored in the spectral domain, as a element-wise
         # multiplication between the filter and the image (which has been transformed to the spectral domain)
-        source = tf.reshape(source,shape=[-1,256,256,1])
+        # source = tf.reshape(source,shape=[-1,256,256,1])
+        source = tf.expand_dims(source,0)
+        source = tf.expand_dims(source,3)
+        print('__debug__source: ', source)
+
         batch_size, input_height, input_width, depth = source.get_shape().as_list()
 
         # self.sess.run(tf.global_variables_initializer())
@@ -80,7 +84,6 @@ class FFTSR:
         # w = tf.expand_dims(w, 0)  # batch, channels, filters, height, width
         print(source)
         source = tf.tile(source,[1,1,1,filters])
-        print('__debug__source: ', source)
 
         # Prepare the source tensor for FFT
         # source = tf.transpose(source, [0, , 1, 2])  # batch, channel, height, width
