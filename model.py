@@ -104,6 +104,8 @@ class FFTSR:
         # Drop the batch dimension to keep things consistent with the other conv_op functions
         w = tf.squeeze(w, [0])  # channels, filters, height, width
         w = tf.reduce_sum(w, reduction_indices=2)
+        print('__debug__w: ',w)
+
         print('__debug__squeeze_w',w)
         print('__debug__w_smooth_spatial_filter',w_smooth_spatial_filter)
         # Compute a spatial encoding of the filter for visualization
