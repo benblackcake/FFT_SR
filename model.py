@@ -97,8 +97,8 @@ class FFTSR:
 
         conv = tf.nn.conv2d(conv, w_smooth_spatial_filter, strides=[1, 1, 1, 1], padding='SAME')
         # Drop the batch dimension to keep things consistent with the other conv_op functions
-        w = tf.squeeze(w, [0])  # channels, filters, height, width
-        w = tf.reduce_sum(w, reduction_indices=2)
+        # w = tf.squeeze(w, [0])  # channels, filters, height, width
+        w = tf.reduce_sum(w, reduction_indices=3)
         print('__debug__squeeze_w',w)
         print('__debug__w_smooth_spatial_filter',w_smooth_spatial_filter)
         # Compute a spatial encoding of the filter for visualization
