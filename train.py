@@ -121,6 +121,7 @@ def main():
             result = sr_forward.eval({lr_images: in_lr})
 
             result_lr = merge(input_,[nx, ny],c_dim=3)
+            print(result.shape)
             result_img = merge(result, [nx, ny])
 
             checkimage(result_lr *255/(1e3*1e-5))
