@@ -67,7 +67,7 @@ class FFTSR:
             w_smooth_imag = tf.Variable(init_smooth.imag, dtype=tf.float32, name='imag')
             w_smooth = tf.cast(tf.complex(w_smooth_real, w_smooth_imag), tf.complex64)
             w_smooth_spatial_filter = tf.ifft2d(w_smooth)
-            w_smooth_spatial_filter = tf.abs(tf.transpose(w_smooth_spatial_filter, [2, 3, 0, 1]))
+            w_smooth_spatial_filter = tf.real(tf.transpose(w_smooth_spatial_filter, [2, 3, 0, 1]))
 
             b = tf.Variable(tf.constant(0.1, shape=[filters]))
         print('__debug__w: ',w)
@@ -91,7 +91,7 @@ class FFTSR:
         # Sum out the channel dimension, and prepare for bias_add
         # Note: The decision to sum out the channel dimension seems intuitive, but
         #	   not necessarily theoretically sound.
-        conv = tf.abs(tf.ifft2d(conv))
+        conv = tf.real(tf.ifft2d(conv))
         # conv = tf.reduce_sum(conv, reduction_indices=3)  # batch, filters, height, width
         print('__debug__conv',conv)
 
