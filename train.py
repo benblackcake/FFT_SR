@@ -136,7 +136,7 @@ def main():
             checkimage(sr_)
             print(result_img)
             print(result.shape)
-            plt_imshow(result_img)
+            plt_imshow(residual)
             print(result_img)
             print(result_img.shape)
 
