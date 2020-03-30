@@ -111,7 +111,7 @@ class FFTSR:
         output = tf.reduce_sum(output, reduction_indices=3)  # batch, filters, height, width
 
         print('__debug__output',output)
-        output = tf.squeeze(output)
+        # output = tf.squeeze(output)
         return output, spatial_filter, w
 
 
