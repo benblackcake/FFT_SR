@@ -107,7 +107,7 @@ def main():
                     _, err = sess.run([sr_opt, loss],
                                     feed_dict={lr_images: b_images, hr_images: b_labels})
                     debug_shape = sess.run([lr_images],feed_dict={lr_images: b_images, hr_images: b_labels})
-                    
+                    print(debug_shape.shape)
                     counter +=1
                     # print('error: ',err)
                     pbar.set_description('[ERROR %.8f]'% err)
