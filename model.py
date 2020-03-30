@@ -71,7 +71,7 @@ class FFTSR:
             w_smooth_imag = tf.Variable(init_smooth.imag, dtype=tf.float32, name='imag')
             w_smooth = tf.cast(tf.complex(w_smooth_real, w_smooth_imag), tf.complex64)
             w_smooth_spatial_filter = tf.ifft2d(w_smooth)
-            w_smooth_spatial_filter = tf.abs(w_smooth_spatial_filter)
+            w_smooth_spatial_filter = tf.abs(w_smooth_spatial_filter)#debug shape to 1,5,5,5
 
             b = tf.Variable(tf.constant(0.1, shape=[filters]))
         print('__debug__w: ',w)
