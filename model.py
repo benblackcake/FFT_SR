@@ -45,7 +45,8 @@ class FFTSR:
         f_ = f_ * tf.abs(self.spatial_c6)
         # f_ = tf.real(tf.ifft2d(f_))
         print('__debug__spatial_c1',self.spatial_c1)
-        return f_
+        x = x + f_
+        return x
 
 
     def fft_conv_pure(self, source, filters, width, height, batch_size, activation='relu'):
