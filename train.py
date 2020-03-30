@@ -140,6 +140,8 @@ def main():
             sr_[:,:,0] = sr_[:,:,0] + residual
             sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
 
+            cv2.imwrite('bicubic_debug',result_lr)
+            cv2.imwrite('sr_result_debug',sr_)
             checkimage(sr_)
             print(result_img)
             print(result.shape)
