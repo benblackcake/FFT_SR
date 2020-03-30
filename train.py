@@ -97,8 +97,8 @@ def main():
                     batch_images = input_[idx * args.batch_size : (idx + 1) * args.batch_size]
                     batch_labels = label_[idx * args.batch_size : (idx + 1) * args.batch_size]
 
-                    b_images = np.reshape(batch_images[:,:,:,0],[1,33,33])
-                    b_labels = np.reshape(batch_labels[:,:,:,0],[1,33,33])
+                    b_images = np.reshape(batch_images[:,:,:,0],[args.batch_size,33,33])
+                    b_labels = np.reshape(batch_labels[:,:,:,0],[args.batch_size,33,33])
                     # b_images = batch_images[:,:,:,0]
                     # b_labels = batch_labels[:,:,:,0]
                     # print(b_images.shape)
