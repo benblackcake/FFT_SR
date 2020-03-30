@@ -63,7 +63,6 @@ def main():
     lr_images = tf.placeholder(tf.float32, [None,33,33], name='lr_images')
     hr_images = tf.placeholder(tf.float32, [None,33,33], name='hr_images')
 
-
     fftsr = FFTSR(learning_rate=args.learning_rate)
     sr_forward = fftsr.model(lr_images)
     # sr_forward = fftsr.model(lr_images)
