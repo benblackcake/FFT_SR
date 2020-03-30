@@ -53,10 +53,10 @@ class FFTSR:
         source = tf.expand_dims(source,3)
         print('__DENUG__source_shape',source)
         # batch_size, input_height, input_width, depth = source.get_shape().as_list()
-
+        print(source.get_shape())
         # self.sess.run(tf.global_variables_initializer())
         with tf.variable_scope('fft_conv'):
-            init = self.random_spatial_to_spectral(batch_size, height, width,filters)
+            init = self.random_spatial_to_spectral(128, height, width,filters)
             init_smooth = self.random_spatial_to_spectral(filters, filters, filters, filters)
 
             w_real = tf.Variable(init.real, dtype=tf.float32, name='real', validate_shape=False)
