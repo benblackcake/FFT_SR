@@ -42,7 +42,7 @@ class FFTSR:
         # f_ = f1*tf.abs(self.spatial_c1) + f2*tf.abs(self.spatial_c2) + f3*tf.abs(self.spatial_c3) + \
         #      f4*tf.abs(self.spatial_c4) + f5*tf.abs(self.spatial_c5) + f6*tf.abs(self.spatial_c6)
         
-        f_ = f_ * tf.real(self.spatial_c6)
+        f_ = f_ * tf.abs(self.spatial_c6)
         # f_ = tf.real(tf.ifft2d(f_))
         print('__debug__spatial_c1',self.spatial_c1)
         # x = x + f_
