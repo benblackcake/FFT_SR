@@ -35,10 +35,10 @@ def imsave(image, path, config):
         plt.show()
 
     
-def checkimage(image):
+def checkimage(image,path):
     image = image.astype(np.uint8)
     image = cv2.cvtColor(image, cv2.COLOR_YCR_CB2BGR)
-    cv2.imwrite('bicubic_debug.bmp',image)
+    cv2.imwrite(path,image)
     cv2.imshow("test",image)
     cv2.waitKey(0)
 

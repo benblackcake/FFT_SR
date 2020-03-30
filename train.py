@@ -129,7 +129,7 @@ def main():
             print(result.shape)
             result_img = merge(result, [nx, ny])
 
-            checkimage(result_lr *255/(1e3*1e-5))
+            checkimage(result_lr *255/(1e3*1e-5),'bicubic_debug.bmp')
 
             sr_ = result_lr
             sr_ = sr_ *255/(1e3*1e-5)
@@ -142,7 +142,7 @@ def main():
 
             # cv2.imwrite('bicubic_debug.bmp',cv2.cvtColor(result_lr *255/(1e3*1e-5),cv2.COLOR_YCR_CB2BGR))
             # cv2.imwrite('sr_result_debug.bmp',CV2.cvtColor(SR_,CV2.COLOR_YCR_CB2BGR))
-            checkimage(sr_)
+            checkimage(sr_,'sr_result_debug.bmp')
             print(result_img)
             print(result.shape)
             plt_imshow(residual)
