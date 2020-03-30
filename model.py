@@ -86,7 +86,7 @@ class FFTSR:
         print('__debug__source_fft',source_fft)
 
 
-        conv = source_fft * tf.conj(w)
+        conv = tf.multiply(source_fft, tf.conj(w))
 
         # Sum out the channel dimension, and prepare for bias_add
         # Note: The decision to sum out the channel dimension seems intuitive, but
