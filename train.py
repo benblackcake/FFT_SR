@@ -128,7 +128,7 @@ def main():
             result_lr = merge(input_,[nx, ny],c_dim=3)
             print(result.shape)
             result_img = merge(result, [nx, ny])
-            label_merge = merge(label_,[nx, ny])
+            label_merge = merge(label_,[nx, ny], c_dim=3)
 
             checkimage(label_merge *255/(1e3*1e-5) ,'label_debug.bmp')
             checkimage(result_lr *255/(1e3*1e-5),'bicubic_debug.bmp')
