@@ -55,7 +55,7 @@ def main():
     parser.add_argument('--result_dir', type=str, default='result', help='Name of result directory')
     parser.add_argument('--test-img', type=str, default='', help='test_img')
     parser.add_argument('--is-train', type=int, default=1, help='training')
-    parser.add_argument('--batch-size', type=int, default=128, help='Mini-batch size.')
+    parser.add_argument('--batch-size', type=int, default=1, help='Mini-batch size.')
 
 
     args = parser.parse_args()
@@ -97,8 +97,8 @@ def main():
                     batch_images = input_[idx * args.batch_size : (idx + 1) * args.batch_size]
                     batch_labels = label_[idx * args.batch_size : (idx + 1) * args.batch_size]
 
-                    b_images = np.reshape(batch_images[:,:,:,0],[128,33,33])
-                    b_labels = np.reshape(batch_labels[:,:,:,0],[128,33,33])
+                    b_images = np.reshape(batch_images[:,:,:,0],[1,33,33])
+                    b_labels = np.reshape(batch_labels[:,:,:,0],[1,33,33])
                     # b_images = batch_images[:,:,:,0]
                     # b_labels = batch_labels[:,:,:,0]
                     # print(b_images.shape)
