@@ -61,7 +61,7 @@ class FFTSR:
         # self.sess.run(tf.global_variables_initializer())
         with tf.variable_scope('fft_conv'):
             init = self.random_spatial_to_spectral(batch_size, height, width,filters)
-            init_smooth = self.random_spatial_to_spectral(filters, filters, filters, filters)
+            init_smooth = self.random_spatial_to_spectral(batch_size, filters, filters, filters)
 
             w_real = tf.Variable(init.real, dtype=tf.float32, name='real', validate_shape=False)
             w_imag = tf.Variable(init.imag, dtype=tf.float32, name='imag', validate_shape=False)
@@ -71,7 +71,7 @@ class FFTSR:
             w_smooth_imag = tf.Variable(init_smooth.imag, dtype=tf.float32, name='imag')
             w_smooth = tf.cast(tf.complex(w_smooth_real, w_smooth_imag), tf.complex64)
             w_smooth_spatial_filter = tf.ifft2d(w_smooth)
-            w_smooth_spatial_filter = tf.abs(tf.transpose(w_smooth_spatial_filter, [2, 3, 0, 1]))
+            w_smooth_spatial_filter = tf.abs(w_smooth_spatial_filter)
 
             b = tf.Variable(tf.constant(0.1, shape=[filters]))
         print('__debug__w: ',w)
