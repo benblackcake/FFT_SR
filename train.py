@@ -144,7 +144,7 @@ def main():
             # residual = np.int(result_img).astype(np.uint8)
             print('__debug__sr_[:,:,0]',sr_[:,:,0])            
             print('__debug__residual',residual)
-
+            print('__debug__residual_norm',residual*255/(1e3*1e-5))
             sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
             print('__debug__clip__sr_[:,:,0]',sr_[:,:,0])
 
