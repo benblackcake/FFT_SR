@@ -147,8 +147,8 @@ def main():
             print('__debug__sr_[:,:,0]',sr_[:,:,0])            
             print('__debug__residual',residual)
 
-            print(sr_[:,:,0])
             sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
+            print('__debug__clip__sr_[:,:,0]',sr_[:,:,0])
 
             # cv2.imwrite('bicubic_debug.bmp',cv2.cvtColor(result_lr *255/(1e3*1e-5),cv2.COLOR_YCR_CB2BGR))
             # cv2.imwrite('sr_result_debug.bmp',CV2.cvtColor(SR_,CV2.COLOR_YCR_CB2BGR))
