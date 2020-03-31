@@ -152,8 +152,7 @@ def main():
             # cv2.imwrite('sr_result_debug.bmp',CV2.cvtColor(SR_,CV2.COLOR_YCR_CB2BGR))
             checkimage(sr_,'sr_result_debug.bmp')
             plt_imshow(residual*255/(1e3*1e-5))
-            print(result_img)
-            print(result_img.shape)
+
 
 if __name__ == '__main__':
 
