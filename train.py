@@ -126,9 +126,9 @@ def main():
             result = sr_forward.eval({lr_images: in_lr})
 
             result_lr = merge(input_,[nx, ny],c_dim=3)
-            print(result.shape)
             result_img = merge(result, [nx, ny])
             label_merge = merge(label_,[nx, ny], c_dim=3)
+            print(result.shape)
 
             checkimage(label_merge *255/(1e3*1e-5) ,'label_debug.bmp')
             checkimage(result_lr *255/(1e3*1e-5),'bicubic_debug.bmp')
@@ -137,9 +137,13 @@ def main():
             sr_ = sr_ *255/(1e3*1e-5)
 
             result_img = result_img*255/(1e3*1e-5)
-            residual = np.clip(result_img, 0.0, 255.0).astype(np.uint8)
             
+            residual = np.clip(result_img, 0.0, 255.0).astype(np.uint8)
+            print(sr_[:,:,0])            
             sr_[:,:,0] = sr_[:,:,0] + residual
+            print(residual)
+
+            print(sr_[:,:,0])
             sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
 
             # cv2.imwrite('bicubic_debug.bmp',cv2.cvtColor(result_lr *255/(1e3*1e-5),cv2.COLOR_YCR_CB2BGR))
