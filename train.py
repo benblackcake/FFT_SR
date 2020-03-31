@@ -139,8 +139,9 @@ def main():
             result_img = result_img*255/(1e3*1e-5)
             
             # residual = np.clip(result_img, 0.0, 255.0).astype(np.uint8)
+            residual = result_img
             print(sr_[:,:,0])            
-            sr_[:,:,0] = sr_[:,:,0] + result_img
+            sr_[:,:,0] = sr_[:,:,0] + residual
             print(residual)
 
             print(sr_[:,:,0])
