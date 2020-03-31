@@ -133,16 +133,20 @@ def main():
             checkimage(label_merge *255/(1e3*1e-5) ,'label_debug.bmp')
             checkimage(result_lr *255/(1e3*1e-5),'bicubic_debug.bmp')
 
+            residual = result_img
+
             sr_ = result_lr
+            print(sr_[:,:,0])            
+            
+            sr_[:,:,0] = sr_[:,:,0] + residual
+
             sr_ = sr_ *255/(1e3*1e-5)
 
             result_img = result_img*255/(1e3*1e-5)
             
             # residual = np.clip(result_img, 0.0, 255.0).astype(np.uint8)
-            residual = np.int(result_img).astype(np.uint8)
-            # residual = result_img
+            # residual = np.int(result_img).astype(np.uint8)
             print(sr_[:,:,0])            
-            sr_[:,:,0] = sr_[:,:,0] + residual
             print(residual)
 
             print(sr_[:,:,0])
