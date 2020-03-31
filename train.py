@@ -118,7 +118,6 @@ def main():
                         save(sess, saver, args.checkpoint_dir, counter)
         else:
             print("Now Start Testing...")
-            print("nx","ny",nx,ny)
             # in_ = np.reshape(input_[:,:,:,0],[input_.shape[0]])
             in_lr = input_[:,:,:,0]
             in_hr = input_
@@ -128,7 +127,6 @@ def main():
             result_lr = merge(input_,[nx, ny],c_dim=3)
             result_img = merge(result, [nx, ny])
             label_merge = merge(label_,[nx, ny], c_dim=3)
-            print(result.shape)
 
             checkimage(label_merge *255/(1e3*1e-5) ,'label_debug.bmp')
             checkimage(result_lr *255/(1e3*1e-5),'bicubic_debug.bmp')
@@ -136,8 +134,8 @@ def main():
             residual = result_img
 
             sr_ = result_lr
-            print(sr_[:,:,0])            
-            
+            print('__debug__sr_[:,:,0]',sr_[:,:,0])            
+
             sr_[:,:,0] = sr_[:,:,0] + residual
 
             sr_ = sr_ *255/(1e3*1e-5)
@@ -146,8 +144,8 @@ def main():
             
             # residual = np.clip(result_img, 0.0, 255.0).astype(np.uint8)
             # residual = np.int(result_img).astype(np.uint8)
-            print(sr_[:,:,0])            
-            print(residual)
+            print('__debug__sr_[:,:,0]',sr_[:,:,0])            
+            print('__debug__residual',residual)
 
             print(sr_[:,:,0])
             sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
