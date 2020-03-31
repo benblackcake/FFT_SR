@@ -140,7 +140,7 @@ def main():
             
             # residual = np.clip(result_img, 0.0, 255.0).astype(np.uint8)
             print(sr_[:,:,0])            
-            sr_[:,:,0] = sr_[:,:,0] + residual
+            sr_[:,:,0] = sr_[:,:,0] + result_img
             print(residual)
 
             print(sr_[:,:,0])
