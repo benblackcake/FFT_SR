@@ -134,7 +134,7 @@ def main():
             residual = result_img
 
             sr_ = result_lr
-            print('__debug__sr_[:,:,0]',sr_[:,:,0])            
+            print('__debug__sr_[:,:,0]',sr_[:,:,0]*255/(1e3*1e-5))            
 
             sr_[:,:,0] = sr_[:,:,0] + residual
 
