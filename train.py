@@ -128,8 +128,8 @@ def main():
             result_img = merge(result, [nx, ny])
             label_merge = merge(label_,[nx, ny], c_dim=3)
 
-            checkimage(label_merge *255 ,'label_debug.bmp')
-            checkimage(result_lr *255,'bicubic_debug.bmp')
+            checkimage(label_merge *255/(1e3*1e-5) ,'label_debug.bmp')
+            checkimage(result_lr *255/(1e3*1e-5),'bicubic_debug.bmp')
 
             residual = result_img
 
@@ -138,20 +138,20 @@ def main():
 
             sr_[:,:,0] = sr_[:,:,0] + residual
 
-            sr_ = sr_ *255
+            sr_ = sr_ *255/(1e3*1e-5)
 
             # residual = np.clip(result_img, 0.0, 255.0).astype(np.uint8)
             # residual = np.int(result_img).astype(np.uint8)
             print('__debug__sr_[:,:,0]',sr_[:,:,0])            
             print('__debug__residual',residual)
-            print('__debug__residual_norm',residual*255)
+            print('__debug__residual_norm',residual*255/(1e3*1e-5))
             sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
             print('__debug__clip__sr_[:,:,0]',sr_[:,:,0])
 
             # cv2.imwrite('bicubic_debug.bmp',cv2.cvtColor(result_lr *255/(1e3*1e-5),cv2.COLOR_YCR_CB2BGR))
             # cv2.imwrite('sr_result_debug.bmp',CV2.cvtColor(SR_,CV2.COLOR_YCR_CB2BGR))
             checkimage(sr_,'sr_result_debug.bmp')
-            plt_imshow(residual*255)
+            plt_imshow(residual*255/(1e3*1e-5))
 
 
 if __name__ == '__main__':
