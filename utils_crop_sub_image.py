@@ -156,8 +156,8 @@ def make_sub_data(data, image_size, scale, is_train=True):
                 # Normialize
                 # cv2.imshow("srimg",sub_input)
                 # cv2.waitKey(0)
-                sub_input =  sub_input *(1e3*1e-5)
-                sub_label =  sub_label *(1e3*1e-5)
+                sub_input =  sub_input / 255.0 #*(1e3*1e-5)
+                sub_label =  sub_label / 255.0 #*(1e3*1e-5)
                 # Add to sequence
                 sub_input_sequence.append(sub_input)
                 sub_label_sequence.append(sub_label)
