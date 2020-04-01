@@ -61,7 +61,7 @@ class FFTSR:
         # self.sess.run(tf.global_variables_initializer())
         with tf.variable_scope('fft_conv'):
             init = self.random_spatial_to_spectral(batch_size, height, width,filters)
-            init_smooth = self.random_spatial_to_spectral(batch_size, filters, filters, filters)
+            init_smooth = self.random_spatial_to_spectral(filters, filters, filters, filters)
 
             w_real = tf.Variable(init.real, dtype=tf.float32, name='real', validate_shape=False)
             w_imag = tf.Variable(init.imag, dtype=tf.float32, name='imag', validate_shape=False)
