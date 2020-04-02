@@ -148,9 +148,9 @@ def main():
             # sr_ = sr_ *255/(1e3*1e-5)
 
             # residual = result_sr*255/(1e3*1e-5)
-            print(residual)
+            print(result_sr)
             # residual = np.clip(result_sr, 0.0, 255.0).astype(np.uint8)
-            cv2.imwrite('residual_debug.bmp',residual)           
+            cv2.imwrite('residual_debug.bmp',result_sr)           
             # sr_[:,:,0] = sr_[:,:,0] + residual
             # sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
 
@@ -160,7 +160,7 @@ def main():
             # print(result_img)
             # print(result.shape)
             plt_imshow(result_label[:,:,0] - result_bicubic[:,:,0])
-            plt_imshow(residual)
+            plt_imshow(result_sr)
             # print(result_img)
             # print(result_img.shape)
 
