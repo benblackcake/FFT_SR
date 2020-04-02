@@ -60,8 +60,8 @@ def main():
 
     args = parser.parse_args()
 
-    lr_images = tf.placeholder(tf.float32, [None,33,33], name='lr_images')
-    hr_images = tf.placeholder(tf.float32, [None,33,33], name='hr_images')
+    lr_images = tf.placeholder(tf.float32, [None,args.image_size,args.image_size], name='lr_images')
+    hr_images = tf.placeholder(tf.float32, [None,args.image_size,args.image_size], name='hr_images')
 
     fftsr = FFTSR(learning_rate=args.learning_rate)
     sr_forward = fftsr.model(lr_images)
