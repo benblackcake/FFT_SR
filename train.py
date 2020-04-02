@@ -130,7 +130,8 @@ def main():
 
 
             sr_ = result_bicubic
-            sr_[:,:,0] = sr_[:,:,0] + result_sr
+            add_residual = result_bicubic[:,:,0] + result_sr
+            sr_[:,:,0] = add_residual
 
             sr_ = sr_ *255/(1e3*1e-5)
             sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
