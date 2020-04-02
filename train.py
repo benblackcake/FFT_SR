@@ -157,6 +157,7 @@ def main():
             # checkimage(sr_,'sr_result_debug.bmp')
             # print(result_img)
             # print(result.shape)
+            plt_imshow(result_label - result_bicubic)
             plt_imshow(residual)
             # print(result_img)
             # print(result_img.shape)
