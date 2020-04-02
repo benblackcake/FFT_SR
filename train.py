@@ -138,7 +138,7 @@ def main():
 
             checkimage(result_label,'label_debug.bmp')
             checkimage(result_bicubic,'bicubic_debug.bmp')
-            checkimage(sr_, 'SR image')
+            checkimage(sr_, 'sr_result_debug.bmp')
 
             # sr_ = result_img
             # sr_ = sr_ *255/(1e3*1e-5)
