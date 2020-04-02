@@ -54,6 +54,7 @@ class FFTSR:
         # multiplication between the filter and the image (which has been transformed to the spectral domain)
 
         # source = tf.reshape(source,shape=[-1,width,height,1])
+        source = tf.expand_dims(source,3)
         print('__DENUG__source_shape',source)
         # batch_size, input_height, input_width, depth = source.get_shape().as_list()
         print(source.get_shape())
@@ -79,14 +80,13 @@ class FFTSR:
 
         # Add batch as a dimension for later broadcasting
         # w = tf.expand_dims(w, 0)  # batch, channels, filters, height, width
-        source_fft = tf.fft2d(tf.complex(source, 0.0 * source))
-        source_fft = tf.expand_dims(source_fft,3)
-        print(source_fft)
-        source_fft = tf.tile(source_fft,[1,1,1,filters])
+        print(source)
+        source = tf.tile(source,[1,1,1,filters])
         print('__debug__source: ', source)
 
         # Prepare the source tensor for FFT
         # source = tf.transpose(source, [0, , 1, 2])  # batch, channel, height, width
+        source_fft = tf.fft2d(tf.complex(source, 0.0 * source))
         print('__debug__source_fft',source_fft)
 
 
