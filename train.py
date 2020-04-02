@@ -11,6 +11,8 @@ from matplotlib import pyplot as plt
 import os
 import time
 
+np.set_printoptions(threshold=sys.maxsize)
+
 def load(sess, saver, checkpoint_dir):
     """
         To load the checkpoint use to test or pretrain
