@@ -132,6 +132,7 @@ def main():
             sr_ = result_bicubic
             sr_[:,:,0] = sr_[:,:,0] + result_sr
 
+            sr_ = sr_ *255/(1e3*1e-5)
             sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
             result_bicubic = result_bicubic *255/(1e3*1e-5)
             result_label = result_label *255/(1e3*1e-5)
