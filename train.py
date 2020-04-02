@@ -132,7 +132,7 @@ def main():
             sr_[:,:,:,0] = input_[:,:,:,0] + result
             # sr_[:,:,0] = add_residual
             result_bicubic = merge(input_,[nx, ny],c_dim=3)#bicubic reconstruct
-            result_sr = merge(sr_, [nx, ny,c_dim=3])#SR reconstruct
+            result_sr = merge(sr_, [nx, ny],c_dim=3)#SR reconstruct
             result_label = merge(label_,[nx, ny], c_dim=3) #original HR image reconstruct
 
             sr_ = sr_ *255/(1e3*1e-5)
