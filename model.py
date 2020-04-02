@@ -80,9 +80,9 @@ class FFTSR:
         # Add batch as a dimension for later broadcasting
         # w = tf.expand_dims(w, 0)  # batch, channels, filters, height, width
         source_fft = tf.fft2d(tf.complex(source, 0.0 * source))
-        source = tf.expand_dims(source,3)
-        print(source)
-        source = tf.tile(source,[1,1,1,filters])
+        source_fft = tf.expand_dims(source_fft,3)
+        print(source_fft)
+        source_fft = tf.tile(source_fft,[1,1,1,filters])
         print('__debug__source: ', source)
 
         # Prepare the source tensor for FFT
