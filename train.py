@@ -145,7 +145,7 @@ def main():
             # sr_ = sr_ *255/(1e3*1e-5)
 
             # result_img = result_img*255/(1e3*1e-5)
-            # residual = np.clip(result_img, 0.0, 255.0).astype(np.uint8)
+            residual = np.clip(result_sr, 0.0, 255.0).astype(np.uint8)
             
             # sr_[:,:,0] = sr_[:,:,0] + residual
             # sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
@@ -155,7 +155,7 @@ def main():
             # checkimage(sr_,'sr_result_debug.bmp')
             # print(result_img)
             # print(result.shape)
-            # plt_imshow(residual)
+            plt_imshow(residual)
             # print(result_img)
             # print(result_img.shape)
 
