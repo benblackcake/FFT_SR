@@ -135,19 +135,19 @@ def main():
             result_sr = merge(sr_, [nx, ny],c_dim=3)#SR reconstruct
             result_label = merge(label_,[nx, ny], c_dim=3) #original HR image reconstruct
 
-            sr_ = sr_ *255/(1e3*1e-5)
+            result_sr = result_sr *255/(1e3*1e-5)
             # sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
             result_bicubic = result_bicubic *255/(1e3*1e-5)
             result_label = result_label *255/(1e3*1e-5)
 
             checkimage(result_label,'label_debug.bmp')
             checkimage(result_bicubic,'bicubic_debug.bmp')
-            checkimage(sr_, 'sr_result_debug.bmp')
+            checkimage(result_sr, 'sr_result_debug.bmp')
 
             # sr_ = result_img
             # sr_ = sr_ *255/(1e3*1e-5)
 
-            residual = result_sr*255/(1e3*1e-5)
+            # residual = result_sr*255/(1e3*1e-5)
             print(residual)
             # residual = np.clip(result_sr, 0.0, 255.0).astype(np.uint8)
             cv2.imwrite('residual_debug.bmp',residual)           
