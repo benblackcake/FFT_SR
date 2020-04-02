@@ -146,6 +146,7 @@ def main():
             # sr_ = sr_ *255/(1e3*1e-5)
 
             residual = result_sr*255/(1e3*1e-5)
+            print(residual)
             # residual = np.clip(result_sr, 0.0, 255.0).astype(np.uint8)
             
             # sr_[:,:,0] = sr_[:,:,0] + residual
