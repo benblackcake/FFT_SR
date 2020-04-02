@@ -139,7 +139,7 @@ def main():
             print(result_bicubic)
             result_label = result_label *255/(1e3*1e-5)
 
-            checkimage(result_label,'label_debug.bmp')
+            # checkimage(result_label,'label_debug.bmp')
             checkimage(result_bicubic[:,:,0],'bicubic_debug.bmp')
             checkimage(sr_[:,:,0], 'sr_result_debug.bmp')
 
