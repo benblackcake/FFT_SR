@@ -73,7 +73,7 @@ class FFTSR:
             w_smooth_spatial_filter = tf.ifft2d(w_smooth)
             w_smooth_spatial_filter = tf.abs(w_smooth_spatial_filter)#debug shape to 1,5,5,5
 
-            b = tf.Variable(tf.constant(0.1, shape=[filters]))
+            b = tf.Variable(tf.constant(0.01, shape=[filters]))
         print('__debug__w: ',w)
         print('__debug__b: ',b)
         print('w_smooth_spatial_filter: ',w_smooth_spatial_filter)
