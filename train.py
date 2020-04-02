@@ -120,36 +120,47 @@ def main():
             print("Now Start Testing...")
             print("nx","ny",nx,ny)
             # in_ = np.reshape(input_[:,:,:,0],[input_.shape[0]])
-            in_lr = input_[:,:,:,0]
-            in_hr = input_
+            in_lr_y = input_[:,:,:,0]
+            # in_hr = input_
 
-            result = sr_forward.eval({lr_images: in_lr})
+            result = sr_forward.eval({lr_images: in_lr_y})
 
-            result_lr = merge(input_,[nx, ny],c_dim=3)
+            result_bicubic = merge(input_,[nx, ny],c_dim=3)#bicubic reconstruct
+            result_sr = merge(result, [nx, ny])#SR reconstruct
+            result_label = merge(label_,[nx, ny], c_dim=3) #original HR image reconstruct
+
             print(result.shape)
-            result_img = merge(result, [nx, ny])
-            label_merge = merge(label_,[nx, ny], c_dim=3)
 
-            checkimage(label_merge *255/(1e3*1e-5) ,'label_debug.bmp')
-            checkimage(result_lr *255/(1e3*1e-5),'bicubic_debug.bmp')
 
-            sr_ = result_lr
-            sr_ = sr_ *255/(1e3*1e-5)
 
-            result_img = result_img*255/(1e3*1e-5)
-            residual = np.clip(result_img, 0.0, 255.0).astype(np.uint8)
+            sr_ = result_bicubic
+            sr_[:,:,0] = sr[:,:,0] + result_sr
+
+            sr_ = np.clip(result_img, 0.0, 255.0).astype(np.uint8)
+            result_bicubic = result_label *255/(1e3*1e-5)
+            result_label = result_label *255/(1e3*1e-5)
+
+            checkimage(result_label,'label_debug.bmp')
+            checkimage(result_bicubic,'bicubic_debug.bmp')
+            checkimage(sr_, 'SR image')
+
+            # sr_ = result_img
+            # sr_ = sr_ *255/(1e3*1e-5)
+
+            # result_img = result_img*255/(1e3*1e-5)
+            # residual = np.clip(result_img, 0.0, 255.0).astype(np.uint8)
             
-            sr_[:,:,0] = sr_[:,:,0] + residual
-            sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
+            # sr_[:,:,0] = sr_[:,:,0] + residual
+            # sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
 
             # cv2.imwrite('bicubic_debug.bmp',cv2.cvtColor(result_lr *255/(1e3*1e-5),cv2.COLOR_YCR_CB2BGR))
             # cv2.imwrite('sr_result_debug.bmp',CV2.cvtColor(SR_,CV2.COLOR_YCR_CB2BGR))
-            checkimage(sr_,'sr_result_debug.bmp')
-            print(result_img)
-            print(result.shape)
-            plt_imshow(residual)
-            print(result_img)
-            print(result_img.shape)
+            # checkimage(sr_,'sr_result_debug.bmp')
+            # print(result_img)
+            # print(result.shape)
+            # plt_imshow(residual)
+            # print(result_img)
+            # print(result_img.shape)
 
 if __name__ == '__main__':
 
