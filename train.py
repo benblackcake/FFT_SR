@@ -136,6 +136,7 @@ def main():
             sr_ = sr_ *255/(1e3*1e-5)
             # sr_ = np.clip(sr_, 0.0, 255.0).astype(np.uint8)
             result_bicubic = result_bicubic *255/(1e3*1e-5)
+            print(result_bicubic)
             result_label = result_label *255/(1e3*1e-5)
 
             checkimage(result_label,'label_debug.bmp')
