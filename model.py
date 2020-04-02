@@ -99,6 +99,7 @@ class FFTSR:
         # conv = tf.reduce_sum(conv, reduction_indices=3)  # batch, filters, height, width
         print('__debug__conv',conv)
 
+        conv = tf.nn.relu(conv)
         conv = tf.nn.conv2d(conv, w_smooth_spatial_filter, strides=[1, 1, 1, 1], padding='SAME')
         # Drop the batch dimension to keep things consistent with the other conv_op functions
         # w = tf.squeeze(w, [0])  # channels, filters, height, width
