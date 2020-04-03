@@ -53,5 +53,8 @@ if __name__ == '__main__':
         sr_img = cv2.cvtColor(sr_img, cv2.COLOR_YCR_CB2RGB)
         lr_img = cv2.cvtColor(lr_img, cv2.COLOR_YCR_CB2RGB)
 
+        cv2.imwrite('sr_.jpg',sr_img)
+        cv2.imwrite('lr_.jpg',lr_img)
+
         plt_imshow(sr_img)
         plt_imshow(lr_img)
