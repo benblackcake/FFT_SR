@@ -243,7 +243,7 @@ def input_setup(image_size, scale, is_train, checkpoint_dir):
     arrinput = np.asarray(sub_input_sequence) # [?, 33, 33, 3]
     arrlabel = np.asarray(sub_label_sequence) # [?, 21, 21, 3]
 
-    make_data_hf(arrinput,sub_label_sequence,is_train, checkpoint_dir)
+    make_data_hf(arrinput,arrlabel,is_train, checkpoint_dir)
 
     return nx, ny
 
